@@ -4,6 +4,10 @@
   import { textInputStore, textSelectionStore } from '../store.js';
   import { saveToLocalStorage, loadFromLocalStorage } from '../utils/localStorage.js';
 
+  let selectedSwatch = null;
+  let selectedGroup = null;
+  let dataStr = ''
+
    function getRandColor(){
 
     const colorKeys = Object.keys(colors);
@@ -17,10 +21,16 @@
 
     $: {
     saveToLocalStorage('swatchGroups', swatchGroups);
+    dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(swatchGroups));
   }
   
-  let selectedSwatch = null;
-  let selectedGroup = null;
+  function importFromJson(e) {
+    const fileReader = new FileReader();
+    fileReader.onload = (event) => {
+      swatchGroups = JSON.parse(event.target.result);
+    };
+    fileReader.readAsText(e.target.files[0]);
+  }
 
 function addSwatch(groupId) {
     const newId = nanoid(); 
@@ -40,9 +50,7 @@ function addSwatch(groupId) {
   function applyPalette() {
     let textInput;
     textInputStore.update(value => {
-        textInput = value; // Get the current value of textInput
-
-        // Get the current selection
+        textInput = value;
         let selection;
         textSelectionStore.subscribe(value => {
             selection = value;
@@ -60,12 +68,12 @@ function addSwatch(groupId) {
 
             console.log("Colorized text", colorizedText);
 
-            // Replace the selected text with the colorized text
+
             textInput = textInput.slice(0, selection.start) + colorizedText + textInput.slice(selection.end);
 
             console.log("Final text input", textInput);
 
-            return textInput; // Update the store with the colorized text
+            return textInput;
         }
     });
   }
@@ -109,6 +117,9 @@ function addSwatch(groupId) {
 </script>
 
 <div class="swatch-content">
+<a href={dataStr} download="swatch_groups.json">Export your colors</a>
+<p>Import your colors</p>
+<input type="file" accept=".json" on:change="{importFromJson}">
 <button on:click={addSwatchGroup}>Add Palette</button>
 
 {#each swatchGroups as group (group.id)}
@@ -150,8 +161,16 @@ function addSwatch(groupId) {
 <style>
 
   .swatch-content{
+    padding-top: 1rem;
+    background-color: var(--background-accent);
+    border-left: 5px solid var(--background-primary);
+    position: absolute;
     overflow-y: scroll;
-    max-height: 200px;
+    width: 300px;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    color: white;
   }
 
   .swatch-group{
@@ -162,15 +181,18 @@ function addSwatch(groupId) {
     display: flex;
     justify-content: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .swatch-box {
     position: relative;
-    width: 100px;
+    flex: 1 0 20%;
+    max-width: 100px;
     height: 70px;
     background-color: #1e90ff;
     border: 1px solid var(--background-accent);
     transition: transform 0.5s;
+    border: 1px solid white;
   }
 
   .swatch-box:hover {

@@ -2,13 +2,12 @@
   import { onMount } from 'svelte';
   import {colorTable as colors} from "../utils/colors"
   import { textInputStore, textSelectionStore } from '../store.js';
-
-
+  import sanitizeHtml from 'sanitize-html';
 
   let textInput = '';
   let textOutput = '';
   let togglePreamble = false;
-      textInputStore.subscribe(value => {
+  textInputStore.subscribe(value => {
     textInput = value;
     updateColor();
   });
@@ -26,21 +25,35 @@
       console.log($textSelectionStore)
   }
 
-function updateColor() {
-    textInputStore.set(textInput);
-    let outputHtml = '';
-    let combinedInput = (togglePreamble ? preamble + "\n" : "") + textInput;
-    let segments = combinedInput.split(/(&\d+|&[A-Za-z])/g);
-    let currentColor = 'white';
+function sanitizeInput(input) {
+  let clean = sanitizeHtml(input, {
+    allowedTags: [], // No HTML tags are allowed
+    allowedAttributes: {}, // No HTML attributes are allowed
+  });
+  
+  clean = clean.replace(/&amp;/g, '&'); // Replace &amp; with &
 
-    for (let i = 0; i < segments.length; i++) {
-        if (colors[segments[i]]) {
-            currentColor = colors[segments[i]];
-        } else {
-            outputHtml += `<span style="color: ${currentColor}">${segments[i]}</span>`;
-        }
-    }
-    textOutput = outputHtml;
+  return clean;
+}
+
+function updateColor() {
+  let sanitizedInput = sanitizeInput(textInput);
+  textInputStore.set(sanitizedInput);
+  textInput = sanitizedInput;
+
+  let outputHtml = '';
+  let combinedInput = (togglePreamble ? preamble + "\n" : "") + sanitizedInput;
+  let segments = combinedInput.split(/(&\d+|&[A-Za-z])/g);
+  let currentColor = 'white';
+
+  for (let i = 0; i < segments.length; i++) {
+      if (colors[segments[i]]) {
+          currentColor = colors[segments[i]];
+      } else {
+          outputHtml += `<span style="color: ${currentColor}">${segments[i]}</span>`;
+      }
+  }
+  textOutput = outputHtml;
 }
 
 
@@ -61,6 +74,7 @@ function updateColor() {
     <div class="color-output">{@html textOutput}</div>
 </div>
 
+
 <style>
     .content {
         display: flex;
@@ -80,7 +94,7 @@ function updateColor() {
         color: white;
         border-radius: 10px;
         padding: 20px;
-        width: 100%;
+        width: 50%;
         box-sizing: border-box;
         margin-bottom: 20px;
         font-size: 18px;
@@ -95,7 +109,7 @@ function updateColor() {
         border-radius: 10px;
         background-color: black;
         color: white;
-        width: 98%;
+        width: 48%;
         min-height: 250px;
         font-size: 18px;
         line-height: 1.6;
@@ -104,30 +118,30 @@ function updateColor() {
         border: 1px solid rgba(255, 255, 0, 0.521);
     }
 
-button {
-    background-color: var(--primary-background);
-    color: #FFD700;
-    padding: 10px 20px;
-    border: 2px solid #FFD700;
-    border-radius: 4px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
+    button {
+        background-color: var(--primary-background);
+        color: #FFD700;
+        padding: 10px 20px;
+        border: 2px solid #FFD700;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
 
-button:hover {
-    background-color: #FFD700;
-    color: #000;
-}
+    button:hover {
+        background-color: #FFD700;
+        color: #000;
+    }
 
-button:active {
-    background-color: #b38600;
-    color: #000;
-    transform: translateY(2px);
-}
+    button:active {
+        background-color: #b38600;
+        color: #000;
+        transform: translateY(2px);
+    }
 
 
 </style>
