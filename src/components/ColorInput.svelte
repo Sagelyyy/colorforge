@@ -37,24 +37,26 @@ function sanitizeInput(input) {
 }
 
 function updateColor() {
-  let sanitizedInput = sanitizeInput(textInput);
-  textInputStore.set(sanitizedInput);
-  textInput = sanitizedInput;
+    let sanitizedInput = sanitizeInput(textInput);
+    textInputStore.set(sanitizedInput);
+    textInput = sanitizedInput;
 
-  let outputHtml = '';
-  let combinedInput = (togglePreamble ? preamble + "\n" : "") + sanitizedInput;
-  let segments = combinedInput.split(/(&\d+|&[A-Za-z])/g);
-  let currentColor = 'white';
+    let outputHtml = '';
+    let combinedInput = (togglePreamble ? preamble + "\n" : "") + sanitizedInput;
+    let segments = combinedInput.split(/(&\d+|&[A-Za-z])/g);
+    let currentColor = 'white';
 
-  for (let i = 0; i < segments.length; i++) {
-      if (colors[segments[i]]) {
-          currentColor = colors[segments[i]];
-      } else {
-          outputHtml += `<span style="color: ${currentColor}">${segments[i]}</span>`;
-      }
-  }
-  textOutput = outputHtml;
+    for (let i = 0; i < segments.length; i++) {
+        if (colors[segments[i]]) {
+            currentColor = colors[segments[i]];
+        } else {
+            let segmentWithPreservedLines = segments[i].replace(/\n/g, '<br>');
+            outputHtml += `<span style="color: ${currentColor}">${segmentWithPreservedLines}</span>`;
+        }
+    }
+    textOutput = outputHtml;
 }
+
 
 
   onMount(updateColor);
@@ -117,31 +119,5 @@ function updateColor() {
         padding: 20px;
         border: 1px solid rgba(255, 255, 0, 0.521);
     }
-
-    button {
-        background-color: var(--primary-background);
-        color: #FFD700;
-        padding: 10px 20px;
-        border: 2px solid #FFD700;
-        border-radius: 4px;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
-
-    button:hover {
-        background-color: #FFD700;
-        color: #000;
-    }
-
-    button:active {
-        background-color: #b38600;
-        color: #000;
-        transform: translateY(2px);
-    }
-
 
 </style>

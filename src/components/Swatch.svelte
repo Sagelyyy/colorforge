@@ -8,14 +8,7 @@
   let selectedGroup = null;
   let dataStr = ''
 
-   function getRandColor(){
-
-    const colorKeys = Object.keys(colors);
-    const randomColorKey = colorKeys[Math.floor(Math.random() * colorKeys.length)];
-    return randomColorKey
-   }
-  
-  let swatchGroups = loadFromLocalStorage('swatchGroups') || [
+    let swatchGroups = loadFromLocalStorage('swatchGroups') || [
     { id: nanoid(), swatches: [{ id: nanoid(), colorKey: getRandColor() }] } 
   ];
 
@@ -23,6 +16,20 @@
     saveToLocalStorage('swatchGroups', swatchGroups);
     dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(swatchGroups));
   }
+
+  function deleteAllPalettes(){
+    swatchGroups = [
+    { id: nanoid(), swatches: [{ id: nanoid(), colorKey: getRandColor() }] } ]
+  }
+
+   function getRandColor(){
+
+    const colorKeys = Object.keys(colors);
+    const randomColorKey = colorKeys[Math.floor(Math.random() * colorKeys.length)];
+    return randomColorKey
+   }
+  
+
   
   function importFromJson(e) {
     const fileReader = new FileReader();
@@ -119,14 +126,17 @@ function addSwatch(groupId) {
 <div class="swatch-content">
 <a href={dataStr} download="swatch_groups.json">Export your colors</a>
 <p>Import your colors</p>
-<input type="file" accept=".json" on:change="{importFromJson}">
+<input class="swatch-import" type="file" accept=".json" on:change="{importFromJson}">
 <button on:click={addSwatchGroup}>Add Palette</button>
+<button on:click={deleteAllPalettes}>Clear Palettes</button>
 
 {#each swatchGroups as group (group.id)}
   <div class="swatch-group">
-    <button on:click={() => addSwatch(group.id)}>Add Color to Palette</button>
-    <button on:click={() => deleteSwatchGroup(group.id)}>Delete Palette</button>
-    <button on:click={() => colorize(group.id)}>Colorize</button>
+    <div class="swatch-button-container">
+        <button class="delete-palette" on:click={() => deleteSwatchGroup(group.id)}>Delete Palette</button>
+        <button on:click={() => addSwatch(group.id)}>Add Color</button>
+        <button on:click={() => colorize(group.id)}>Colorize</button>
+    </div>
     <div class="swatch-container">
       {#each group.swatches as swatch (swatch.id)}
         <div class="swatch-box">
@@ -171,10 +181,18 @@ function addSwatch(groupId) {
     right: 0;
     top: 0;
     color: white;
+
+  }
+
+  .swatch-import{
+    height: 50px;
+    width: 90%;
   }
 
   .swatch-group{
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid rgb(32, 32, 32) !important;
+    padding: 3px;
   }
 
   .swatch-container{
@@ -184,11 +202,26 @@ function addSwatch(groupId) {
     flex-wrap: wrap;
   }
 
+  .swatch-button-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .swatch-button-container > button {
+    font-size: 1rem;
+    width: fit-content;
+  }
+
+  .delete-palette{
+    background-color: rgb(82, 22, 22);
+  }
+
   .swatch-box {
     position: relative;
     flex: 1 0 20%;
-    max-width: 100px;
-    height: 70px;
+    max-width: 50px;
+    height: 40px;
     background-color: #1e90ff;
     border: 1px solid var(--background-accent);
     transition: transform 0.5s;
