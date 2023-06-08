@@ -36,7 +36,7 @@
     cursor: pointer;
     background-color: #000;
     color: var(--lotj-yellow);
-    font-family: "Courier New", Courier, monospace;
+    font-family: "Montserrat", "Courier New", Courier, monospace;
     text-decoration: none;
     display: inline-block;
   }

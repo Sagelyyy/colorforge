@@ -67,7 +67,6 @@
   }
 
   function colorize(groupId) {
-    console.log("Colorize function called");
     selectedGroup = groupId;
     applyPalette();
   }

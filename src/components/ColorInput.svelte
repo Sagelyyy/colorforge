@@ -18,7 +18,6 @@
 
   function handleHelp() {
     toggleHelp = !toggleHelp;
-    console.log(toggleHelp);
   }
 
   function handlePreamble() {
@@ -29,7 +28,6 @@
   function updateSelection(e) {
     const { selectionStart, selectionEnd } = e.target;
     textSelectionStore.set({ start: selectionStart, end: selectionEnd });
-    console.log($textSelectionStore);
   }
 
   function sanitizeInput(input) {
@@ -49,8 +47,7 @@
     textInput = sanitizedInput;
 
     let outputHtml = "";
-    let combinedInput =
-      (togglePreamble ? preamble + "\n" : "") + sanitizedInput;
+    let combinedInput = (togglePreamble ? preamble : "") + sanitizedInput;
     let segments = combinedInput.split(/(&\d+|&[A-Za-z])/g);
     let currentColor = "white";
 
