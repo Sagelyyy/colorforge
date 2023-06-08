@@ -34,11 +34,11 @@
 
   function sanitizeInput(input) {
     let clean = sanitizeHtml(input, {
-      allowedTags: [], // No HTML tags are allowed
-      allowedAttributes: {}, // No HTML attributes are allowed
+      allowedTags: [],
+      allowedAttributes: {},
     });
 
-    clean = clean.replace(/&amp;/g, "&"); // Replace &amp; with &
+    clean = clean.replace(/&amp;/g, "&");
 
     return clean;
   }

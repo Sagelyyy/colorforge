@@ -34,25 +34,25 @@
     border-radius: 5px;
     transition: background-color 0.2s ease, color 0.2s ease;
     cursor: pointer;
-    background-color: #000; /* Black background */
-    color: var(--lotj-yellow); /* Gold color text */
-    font-family: "Courier New", Courier, monospace; /* Monospaced font for a tech look */
-    text-decoration: none; /* Remove underline from link */
-    display: inline-block; /* Make link behave like a button */
+    background-color: #000;
+    color: var(--lotj-yellow);
+    font-family: "Courier New", Courier, monospace;
+    text-decoration: none;
+    display: inline-block;
   }
 
   :global(.sw-button:hover) {
-    background-color: var(--lotj-yellow); /* Gold background on hover */
-    color: #000; /* Black text on hover */
+    background-color: var(--lotj-yellow);
+    color: #000;
   }
 
   :global(.sw-button.delete) {
-    background-color: #ff4d4d; /* Red background for delete button */
+    background-color: #ff4d4d;
   }
 
   :global(.sw-button.delete:hover) {
-    background-color: #b33030; /* Darker red on hover for delete button */
-    color: #fff; /* White text on hover for delete button */
+    background-color: #b33030;
+    color: #fff;
   }
 
   main {
