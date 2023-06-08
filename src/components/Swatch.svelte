@@ -241,34 +241,6 @@
     box-shadow: -5px 10px 30px black;
   }
 
-  .download-button {
-    background-color: var(--primary-background);
-    color: #ffd700;
-    padding: 10px 20px;
-    border: 2px solid #ffd700;
-    border-radius: 4px;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    max-width: 270px;
-    max-height: 50px;
-    text-decoration: none;
-  }
-
-  .download-button:hover {
-    background-color: #ffd700;
-    color: #000;
-  }
-
-  .download-button:active {
-    background-color: #b38600;
-    color: #000;
-    transform: translateY(2px);
-  }
-
   .swatch-import {
     height: 50px;
     width: 90%;
@@ -367,24 +339,6 @@
     gap: 5px;
     flex-wrap: wrap;
     padding-bottom: 10px;
-  }
-
-  .swatch-button-container button {
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-  }
-
-  .swatch-button-container .delete {
-    background-color: #ff4d4d;
-    color: white;
-  }
-
-  .swatch-button-container button:hover {
-    filter: brightness(90%);
   }
 
   .swatch-step-container {
