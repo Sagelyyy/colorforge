@@ -1,36 +1,48 @@
 <script>
-  import { nanoid } from 'nanoid';
+  import { nanoid } from "nanoid";
   import { colorTable as colors } from "../utils/colors.js";
-  import { textInputStore, textSelectionStore } from '../store.js';
-  import { saveToLocalStorage, loadFromLocalStorage } from '../utils/localStorage.js';
+  import { textInputStore, textSelectionStore } from "../store.js";
+  import {
+    saveToLocalStorage,
+    loadFromLocalStorage,
+  } from "../utils/localStorage.js";
 
   let selectedSwatch = null;
   let selectedGroup = null;
-  let dataStr = ''
+  let dataStr = "";
 
-    let swatchGroups = loadFromLocalStorage('swatchGroups') || [
-    { id: nanoid(), swatches: [{ id: nanoid(), colorKey: getRandColor() }] } 
+  let swatchGroups = loadFromLocalStorage("swatchGroups") || [
+    {
+      id: nanoid(),
+      step: 1,
+      swatches: [{ id: nanoid(), colorKey: getRandColor() }],
+    },
   ];
 
-    $: {
-    saveToLocalStorage('swatchGroups', swatchGroups);
-    dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(swatchGroups));
+  $: {
+    saveToLocalStorage("swatchGroups", swatchGroups);
+    dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(swatchGroups));
   }
 
-  function deleteAllPalettes(){
+  function deleteAllPalettes() {
     swatchGroups = [
-    { id: nanoid(), swatches: [{ id: nanoid(), colorKey: getRandColor() }] } ]
+      {
+        id: nanoid(),
+        step: 1,
+        swatches: [{ id: nanoid(), colorKey: getRandColor() }],
+      },
+    ];
   }
 
-   function getRandColor(){
-
+  function getRandColor() {
     const colorKeys = Object.keys(colors);
-    const randomColorKey = colorKeys[Math.floor(Math.random() * colorKeys.length)];
-    return randomColorKey
-   }
-  
+    const randomColorKey =
+      colorKeys[Math.floor(Math.random() * colorKeys.length)];
+    return randomColorKey;
+  }
 
-  
   function importFromJson(e) {
     const fileReader = new FileReader();
     fileReader.onload = (event) => {
@@ -39,57 +51,69 @@
     fileReader.readAsText(e.target.files[0]);
   }
 
-function addSwatch(groupId) {
-    const newId = nanoid(); 
-    swatchGroups = swatchGroups.map(group => 
-      group.id === groupId 
-        ? {...group, swatches: [...group.swatches, { id: newId, colorKey: getRandColor() }]} 
+  function addSwatch(groupId) {
+    const newId = nanoid();
+    swatchGroups = swatchGroups.map((group) =>
+      group.id === groupId
+        ? {
+            ...group,
+            swatches: [
+              ...group.swatches,
+              { id: newId, colorKey: getRandColor() },
+            ],
+          }
         : group
     );
-}
+  }
 
   function colorize(groupId) {
     console.log("Colorize function called");
     selectedGroup = groupId;
     applyPalette();
   }
-  
+
   function applyPalette() {
     let textInput;
-    textInputStore.update(value => {
-        textInput = value;
-        let selection;
-        textSelectionStore.subscribe(value => {
-            selection = value;
-        });
+    textInputStore.update((value) => {
+      textInput = value;
+      let selection;
+      textSelectionStore.subscribe((value) => {
+        selection = value;
+      });
 
-        const group = swatchGroups.find(group => group.id === selectedGroup);
-        console.log("Group found", group);
-        if (group) {
-            const selectedText = textInput.slice(selection.start, selection.end);
-            console.log("Selected text", selectedText);
-            const colorizedText = Array.from(selectedText).map((char, i) => {
-                const colorKey = group.swatches[i % group.swatches.length].colorKey;
-                return colorKey + char;
-            }).join('');
+      const group = swatchGroups.find((group) => group.id === selectedGroup);
+      if (group) {
+        const selectedText = textInput.slice(selection.start, selection.end);
 
-            console.log("Colorized text", colorizedText);
+        let colorizedText = "";
+        let colorIndex = 0;
+        for (let i = 0; i < selectedText.length; i++) {
+          const colorKey =
+            group.swatches[colorIndex % group.swatches.length].colorKey;
 
+          if (i % group.step === 0) {
+            colorizedText += colorKey;
+            colorIndex++;
+          }
 
-            textInput = textInput.slice(0, selection.start) + colorizedText + textInput.slice(selection.end);
-
-            console.log("Final text input", textInput);
-
-            return textInput;
+          colorizedText += selectedText[i];
         }
+
+        textInput =
+          textInput.slice(0, selection.start) +
+          colorizedText +
+          textInput.slice(selection.end);
+        return textInput;
+      }
     });
   }
+
   function deleteSwatch(groupId, swatchId) {
-    swatchGroups = swatchGroups.map(group =>
+    swatchGroups = swatchGroups.map((group) =>
       group.id === groupId
         ? {
             ...group,
-            swatches: group.swatches.filter(swatch => swatch.id !== swatchId),
+            swatches: group.swatches.filter((swatch) => swatch.id !== swatchId),
           }
         : group
     );
@@ -97,11 +121,18 @@ function addSwatch(groupId) {
 
   function addSwatchGroup() {
     const newId = nanoid();
-    swatchGroups = [...swatchGroups, { id: newId, swatches: [] }];
+    swatchGroups = [
+      ...swatchGroups,
+      {
+        id: newId,
+        step: 1,
+        swatches: [{ id: nanoid(), colorKey: getRandColor() }],
+      },
+    ];
   }
 
   function deleteSwatchGroup(groupId) {
-    swatchGroups = swatchGroups.filter(group => group.id !== groupId);
+    swatchGroups = swatchGroups.filter((group) => group.id !== groupId);
   }
 
   function openColorPicker(groupId, swatchId) {
@@ -109,12 +140,14 @@ function addSwatch(groupId) {
   }
 
   function updateColor(colorKey) {
-    swatchGroups = swatchGroups.map(group =>
+    swatchGroups = swatchGroups.map((group) =>
       group.id === selectedSwatch.groupId
         ? {
             ...group,
-            swatches: group.swatches.map(swatch =>
-              swatch.id === selectedSwatch.swatchId ? { ...swatch, colorKey } : swatch
+            swatches: group.swatches.map((swatch) =>
+              swatch.id === selectedSwatch.swatchId
+                ? { ...swatch, colorKey }
+                : swatch
             ),
           }
         : group
@@ -124,96 +157,138 @@ function addSwatch(groupId) {
 </script>
 
 <div class="swatch-content">
-<a href={dataStr} download="swatch_groups.json">Export your colors</a>
-<p>Import your colors</p>
-<input class="swatch-import" type="file" accept=".json" on:change="{importFromJson}">
-<button on:click={addSwatchGroup}>Add Palette</button>
-<button on:click={deleteAllPalettes}>Clear Palettes</button>
+  <a href={dataStr} download="swatch_groups.json" class="sw-button"
+    >Export your colors</a
+  >
+  <p>Import your colors</p>
+  <input
+    class="swatch-import"
+    type="file"
+    accept=".json"
+    on:change={importFromJson}
+  />
+  <button class="sw-button" on:click={addSwatchGroup}>Add Palette</button>
+  <button class="sw-button delete" on:click={deleteAllPalettes}
+    >Clear Palettes</button
+  >
 
-{#each swatchGroups as group (group.id)}
-  <div class="swatch-group">
-    <div class="swatch-button-container">
-        <button class="delete-palette" on:click={() => deleteSwatchGroup(group.id)}>Delete Palette</button>
-        <button on:click={() => addSwatch(group.id)}>Add Color</button>
-        <button on:click={() => colorize(group.id)}>Colorize</button>
-    </div>
-    <div class="swatch-container">
-      {#each group.swatches as swatch (swatch.id)}
-        <div class="swatch-box">
-          <div 
-            class="swatch" 
-            style="background-color: {colors[swatch.colorKey]}" 
-            on:click|stopPropagation="{() => openColorPicker(group.id, swatch.id)}"
-          ></div>
-          <span 
-            class="material-symbols-outlined delete-swatch"
-            on:click|stopPropagation="{() => deleteSwatch(group.id, swatch.id)}"
-          >delete</span>
+  {#each swatchGroups as group (group.id)}
+    <div class="swatch-group">
+      <div class="swatch-button-container">
+        <button class="sw-button" on:click={() => addSwatch(group.id)}
+          >Add Color</button
+        >
+        <button class="sw-button" on:click={() => colorize(group.id)}
+          >Colorize</button
+        >
+        <button
+          class="sw-button delete"
+          on:click={() => deleteSwatchGroup(group.id)}>Delete</button
+        >
+        <div class="swatch-step-container">
+          <span>Color every </span><input
+            class="swatch-step"
+            type="number"
+            min="1"
+            bind:value={group.step}
+            on:input={(e) => (group.step = Number(e.target.value))}
+          /> <span>letters</span>
         </div>
-      {/each}
+      </div>
+      <div class="swatch-container">
+        {#each group.swatches as swatch (swatch.id)}
+          <div class="swatch-box">
+            <div
+              class="swatch"
+              style="background-color: {colors[swatch.colorKey]}"
+              on:click|stopPropagation={() =>
+                openColorPicker(group.id, swatch.id)}
+            />
+            <span
+              class="material-symbols-outlined delete-swatch"
+              on:click|stopPropagation={() => deleteSwatch(group.id, swatch.id)}
+              >delete</span
+            >
+          </div>
+        {/each}
+      </div>
     </div>
-  </div>
-{/each}
+  {/each}
 </div>
 <!-- Color Picker Modal -->
 {#if selectedSwatch !== null}
   <div class="modal">
     {#each Object.keys(colors) as colorKey}
-      <div 
-        class="color-option" 
-        style="background-color: {colors[colorKey]}" 
-        on:click="{() => updateColor(colorKey)}"
-      ></div>
+      <div
+        class="color-option"
+        style="background-color: {colors[colorKey]}"
+        on:click={() => updateColor(colorKey)}
+      />
     {/each}
   </div>
 {/if}
 
 <style>
-
-  .swatch-content{
+  .swatch-content {
     padding-top: 1rem;
     background-color: var(--background-accent);
-    border-left: 5px solid var(--background-primary);
     position: absolute;
     overflow-y: scroll;
-    width: 300px;
-    height: 100vh;
+    width: 400px;
+    height: 98vh;
     right: 0;
     top: 0;
     color: white;
-
+    box-shadow: -5px 10px 30px black;
   }
 
-  .swatch-import{
+  .download-button {
+    background-color: var(--primary-background);
+    color: #ffd700;
+    padding: 10px 20px;
+    border: 2px solid #ffd700;
+    border-radius: 4px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    max-width: 270px;
+    max-height: 50px;
+    text-decoration: none;
+  }
+
+  .download-button:hover {
+    background-color: #ffd700;
+    color: #000;
+  }
+
+  .download-button:active {
+    background-color: #b38600;
+    color: #000;
+    transform: translateY(2px);
+  }
+
+  .swatch-import {
     height: 50px;
     width: 90%;
   }
 
-  .swatch-group{
+  .swatch-group {
     padding-bottom: 15px;
-    border-bottom: 3px solid rgb(32, 32, 32) !important;
+    border-top: 3px solid rgb(32, 32, 32) !important;
     padding: 3px;
   }
 
-  .swatch-container{
+  .swatch-container {
     display: flex;
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
   }
 
-  .swatch-button-container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .swatch-button-container > button {
-    font-size: 1rem;
-    width: fit-content;
-  }
-
-  .delete-palette{
+  .delete {
     background-color: rgb(82, 22, 22);
   }
 
@@ -233,10 +308,10 @@ function addSwatch(groupId) {
     cursor: pointer;
   }
 
-  .swatch{
+  .swatch {
     width: 100%;
     height: 100%;
-    content: ' ';
+    content: " ";
     background-color: #1e90ff;
     transition: all 0.5s;
     border: 1px solid var(--background-accent);
@@ -278,12 +353,51 @@ function addSwatch(groupId) {
     flex-wrap: wrap;
   }
 
-.color-option {
+  .color-option {
     display: inline-block;
     width: 50px;
     height: 50px;
     margin: 5px;
     flex-shrink: 0;
-}
+  }
 
+  .swatch-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+  }
+
+  .swatch-button-container button {
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .swatch-button-container .delete {
+    background-color: #ff4d4d;
+    color: white;
+  }
+
+  .swatch-button-container button:hover {
+    filter: brightness(90%);
+  }
+
+  .swatch-step-container {
+    margin-right: 30px;
+    align-self: flex-start;
+    flex-grow: 0;
+  }
+
+  .swatch-step {
+    width: 4rem;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+  }
 </style>
