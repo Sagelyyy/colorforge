@@ -9,7 +9,6 @@
   let isOpen = false;
 
   function selectColor(colorKey) {
-    console.log("select color: " + colorKey);
     dispatch("selectColor", colorKey);
     isOpen = false;
   }

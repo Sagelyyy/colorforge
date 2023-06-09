@@ -24,10 +24,8 @@
 
   $: if (selectedGroup) {
     const group = $swatchGroups.find((group) => group.id === selectedGroup);
-    console.log(group);
     if (group) {
       colorsFromSwatches = group.swatches.map((swatch) => swatch.colorKey);
-      console.log(colorsFromSwatches);
     }
   }
 

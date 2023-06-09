@@ -13,7 +13,6 @@
     class="swatch"
     style="background-color: {colors[swatch.colorKey]}"
     on:click|stopPropagation={() => {
-      console.log(swatch.colorKey);
       dispatch("openColorPicker", {
         groupId: group.id,
         swatchId: swatch.id,

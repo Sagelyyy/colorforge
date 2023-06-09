@@ -2,19 +2,16 @@
   import { nanoid } from "nanoid";
   import { colorTable as colors } from "../utils/colors.js";
   import { getRandColor } from "../utils/colors.js";
-  import { textInputStore, textSelectionStore } from "../store.js";
   import {
     saveToLocalStorage,
     loadFromLocalStorage,
   } from "../utils/localStorage.js";
   import SwatchGroup from "./SwatchGroup.svelte";
   import ColorPickerModal from "./ColorPickerModal.svelte";
-  import { swatchGroups } from "../swatchStore.js"; // New Import
+  import { swatchGroups } from "../swatchStore.js";
 
   let dataStr;
   let selectedSwatch = null;
-  let selectedGroup = null;
-  let selectedColor;
 
   export let colorKeys = Object.keys(colors);
 
@@ -46,7 +43,7 @@
   function importFromJson(e) {
     const fileReader = new FileReader();
     fileReader.onload = (event) => {
-      $swatchGroups = JSON.parse(event.target.result); // Update store value
+      $swatchGroups = JSON.parse(event.target.result);
     };
     fileReader.readAsText(e.target.files[0]);
   }
@@ -64,7 +61,6 @@
   }
 
   function openColorPicker(event) {
-    console.log(event);
     selectedSwatch = event.detail;
   }
 
@@ -81,7 +77,6 @@
   }
 
   function updateColor(colorKey) {
-    console.log("update color: " + JSON.stringify(colorKey));
     $swatchGroups = $swatchGroups.map((group) =>
       group.id === selectedSwatch.groupId
         ? {

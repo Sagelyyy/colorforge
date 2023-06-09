@@ -32,10 +32,6 @@
     ];
   }
 
-  function deleteSwatchGroup(groupId) {
-    $swatchGroups = $swatchGroups.filter((group) => group.id !== groupId);
-  }
-
   function colorize(groupId) {
     selectedGroupStore.set(groupId);
     applyPalette();
@@ -61,7 +57,6 @@
         (group) => group.id === $selectedGroupStore
       );
       if (group) {
-        console.log("SG Group: " + group);
         const selectedText = textInput.slice(selection.start, selection.end);
 
         let colorizedText = "";
