@@ -24,7 +24,6 @@
     class="material-symbols-outlined delete-swatch"
     on:click|stopPropagation={() => {
       dispatch("delete", { groupId: group.id, swatchId: swatch.id });
-      console.log(group, swatch);
     }}>delete</span
   >
 </div>

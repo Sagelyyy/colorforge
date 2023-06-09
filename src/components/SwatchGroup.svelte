@@ -22,8 +22,6 @@
 
   function deleteSwatch(event) {
     const { groupId, swatchId } = event.detail;
-    console.log(groupId, swatchId);
-
     dispatch("deleteSwatch", { groupId, swatchId });
   }
 
