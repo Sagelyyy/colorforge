@@ -1,14 +1,36 @@
 <script>
   import { onMount } from "svelte";
   import { colorTable as colors } from "../utils/colors";
-  import { textInputStore, textSelectionStore } from "../store.js";
+  import {
+    textInputStore,
+    textSelectionStore,
+    selectedColors,
+  } from "../store.js";
   import sanitizeHtml from "sanitize-html";
   import { fade } from "svelte/transition";
+  import { swatchGroups } from "../swatchStore";
+  import { selectedGroupStore } from "../selectedGroupStore.js";
 
   let textInput = "";
   let textOutput = "";
   let togglePreamble = false;
   let toggleHelp = false;
+  let selectedGroup;
+  let colorsFromSwatches = [];
+
+  selectedGroupStore.subscribe((value) => {
+    selectedGroup = value;
+  });
+
+  $: if (selectedGroup) {
+    const group = $swatchGroups.find((group) => group.id === selectedGroup);
+    console.log(group);
+    if (group) {
+      colorsFromSwatches = group.swatches.map((swatch) => swatch.colorKey);
+      console.log(colorsFromSwatches);
+    }
+  }
+
   textInputStore.subscribe((value) => {
     textInput = value;
     updateColor();
@@ -83,7 +105,7 @@
         </li>
         <li>
           Click the 'Colorize' button to apply the colors from your selected
-          swatch to the highlighted text.
+          palette to the highlighted text.
         </li>
         <li>
           Change the value in the 'step counter' field to modify how often

@@ -1,5 +1,6 @@
 <script>
   import ColorInput from "./components/ColorInput.svelte";
+  import Footer from "./components/Footer.svelte";
   import Swatch from "./components/Swatch.svelte";
   import Title from "./components/Title.svelte";
 </script>
@@ -8,6 +9,7 @@
   <Title />
   <Swatch />
   <ColorInput />
+  <Footer />
 </main>
 
 <style>
@@ -17,6 +19,11 @@
     --delete: #da2c38;
     --lotj-yellow: #f9c80e;
     --offset-color: #a3bbad;
+  }
+
+  :global(*) {
+    margin: 0;
+    padding: 0;
   }
 
   :global(body) {

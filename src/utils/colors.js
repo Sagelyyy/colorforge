@@ -271,3 +271,10 @@ export const colorTable = {
   "&002": "rgb(0, 128, 0)",
   "&001": "rgb(128, 0, 0)",
 };
+
+export function getRandColor() {
+  const colorKeys = Object.keys(colorTable);
+  const randomColorKey =
+    colorKeys[Math.floor(Math.random() * colorKeys.length)];
+  return randomColorKey;
+}
