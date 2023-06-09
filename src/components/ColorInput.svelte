@@ -95,7 +95,9 @@
         <li>Type in your text in the text input field.</li>
         <li>If needed, manually add color tags to your text.</li>
         <li>
-          Select your desired color swatches on the right side of the app.
+          Select your desired color swatches on the right side of the app! Click
+          add color to add a new color. Click on a color to change the color.
+          Hover and click on the trash can to remove a color.
         </li>
         <li>
           Highlight the portion of your text in the top input box that you want
