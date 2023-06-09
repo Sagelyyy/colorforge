@@ -66,6 +66,7 @@
 
   function deleteSwatch(event) {
     const { groupId, swatchId } = event.detail;
+    console.log(event.detail);
     $swatchGroups = $swatchGroups.map((group) =>
       group.id === groupId
         ? {
@@ -94,6 +95,7 @@
 
   function deleteSwatchGroup(event) {
     const groupId = event.detail;
+    console.log(groupId);
     $swatchGroups = $swatchGroups.filter((group) => group.id !== groupId);
   }
 </script>

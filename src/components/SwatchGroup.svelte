@@ -1,6 +1,5 @@
 <script>
   import { nanoid } from "nanoid";
-  import { colorTable as colors } from "../utils/colors.js";
   import SwatchColor from "./SwatchColor.svelte";
   import { createEventDispatcher } from "svelte";
   import {
@@ -13,7 +12,7 @@
   import { getRandColor } from "../utils/colors.js";
 
   export let group;
-  let selectedGroup;
+  export let swatch;
 
   const dispatch = createEventDispatcher();
 
@@ -21,8 +20,11 @@
     dispatch("deleteSwatchGroup", group.id);
   }
 
-  function deleteSwatch(swatchId) {
-    dispatch("deleteSwatch", { groupId: group.id, swatchId });
+  function deleteSwatch(event) {
+    const { groupId, swatchId } = event.detail;
+    console.log(groupId, swatchId);
+
+    dispatch("deleteSwatch", { groupId, swatchId });
   }
 
   function addSwatch() {
