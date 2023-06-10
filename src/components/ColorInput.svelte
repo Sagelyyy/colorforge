@@ -213,6 +213,7 @@
     border-radius: 10px;
     padding: 20px;
     width: 50%;
+    height: 100%;
     box-sizing: border-box;
     font-size: 18px;
     resize: none;
@@ -228,7 +229,7 @@
     background-color: black;
     color: white;
     width: 48%;
-    height: 250px;
+    height: 100%;
     font-size: 18px;
     line-height: 1.6;
     text-align: left;
