@@ -173,6 +173,7 @@
     background: var(--lotj-yellow);
     border-radius: 15px 0px 0px 15px;
     cursor: pointer;
+    font-family: "Montserrat", "Courier New", Courier, monospace;
   }
 
   .slideOutTab div {
@@ -186,6 +187,7 @@
     -moz-transform: rotate(270deg);
     -o-transform: rotate(270deg);
     writing-mode: lr-tb;
+    font-family: "Montserrat", "Courier New", Courier, monospace;
   }
 
   .swatch-content {
@@ -206,30 +208,4 @@
     height: 50px;
     width: 90%;
   }
-
-  /* @media screen and (max-width: 800px) {
-    .slideOutTab {
-      z-index: 2;
-      margin-top: 50px;
-      position: absolute;
-      bottom: 0;
-      height: 40px;
-      width: 200px;
-      -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-      background: var(--lotj-yellow);
-      border-radius: 15px 0px 0px 15px;
-      cursor: pointer;
-    }
-
-    .slideOutTab div {
-      text-align: center;
-      position: relative;
-      right: 70px;
-      top: 90px;
-      background: var(--lotj-yellow);
-      height: 40px;
-      width: 200px;
-    }
-  } */
 </style>
