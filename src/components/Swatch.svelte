@@ -12,6 +12,7 @@
   import { fly } from "svelte/transition";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
+  import { selectedGroupStore } from "../selectedGroupStore.js";
 
   const pullTabPosition = tweened(0, {
     duration: 500,
@@ -68,8 +69,9 @@
     ];
   }
 
-  function openColorPicker(event) {
+  function openColorPicker(event, groupId) {
     selectedSwatch = event.detail;
+    selectedGroupStore.set(groupId);
   }
 
   function deleteSwatch(event) {
@@ -144,7 +146,9 @@
     {#each $swatchGroups as group (group.id)}
       <SwatchGroup
         bind:group
-        on:openColorPicker={openColorPicker}
+        on:openColorPicker={(e) => {
+          openColorPicker(e, group.id);
+        }}
         on:deleteSwatch={deleteSwatch}
         on:deleteSwatchGroup={deleteSwatchGroup}
       />

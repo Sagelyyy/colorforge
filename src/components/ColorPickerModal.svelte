@@ -2,6 +2,7 @@
   import { colorTable as colors } from "../utils/colors.js";
   import { createEventDispatcher } from "svelte";
   import { swatchGroups } from "../swatchStore.js";
+  import { selectedGroupStore } from "../selectedGroupStore.js";
 
   const dispatch = createEventDispatcher();
 
@@ -12,9 +13,12 @@
   let selectedColorKeys = [];
 
   $: {
-    selectedColorKeys = $swatchGroups.flatMap((group) =>
-      group.swatches.map((swatch) => swatch.colorKey)
+    const selectedGroup = $swatchGroups.find(
+      (group) => group.id === $selectedGroupStore
     );
+    selectedColorKeys = selectedGroup
+      ? selectedGroup.swatches.map((swatch) => swatch.colorKey)
+      : [];
   }
 
   function selectColor(colorKey) {
