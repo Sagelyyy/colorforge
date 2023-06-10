@@ -1,12 +1,21 @@
 <script>
   import { colorTable as colors } from "../utils/colors.js";
   import { createEventDispatcher } from "svelte";
+  import { swatchGroups } from "../swatchStore.js";
 
   const dispatch = createEventDispatcher();
 
   export let colorKeys = Object.keys(colors);
   export let colorKey = null;
   let isOpen = false;
+
+  let selectedColorKeys = [];
+
+  $: {
+    selectedColorKeys = $swatchGroups.flatMap((group) =>
+      group.swatches.map((swatch) => swatch.colorKey)
+    );
+  }
 
   function selectColor(colorKey) {
     dispatch("selectColor", colorKey);
@@ -22,7 +31,9 @@
   <div class="modal">
     {#each colorKeys as key}
       <div
-        class="color-option"
+        class="color-option {selectedColorKeys.includes(key)
+          ? 'highlight'
+          : ''}"
         style="background-color: {colors[key]}"
         on:click={() => selectColor(key)}
       />
@@ -57,5 +68,9 @@
 
   .color-option:hover {
     scale: 1.2;
+  }
+
+  .color-option.highlight {
+    border: 2px solid white;
   }
 </style>

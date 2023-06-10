@@ -60,13 +60,18 @@
 
         let colorizedText = "";
         let colorIndex = 0;
+        let nonSpaceCount = 0;
         for (let i = 0; i < selectedText.length; i++) {
-          const colorKey =
-            group.swatches[colorIndex % group.swatches.length].colorKey;
+          if (selectedText[i] !== " ") {
+            const colorKey =
+              group.swatches[colorIndex % group.swatches.length].colorKey;
 
-          if (selectedText[i] !== " " && i % group.step === 0) {
-            colorizedText += colorKey;
-            colorIndex++;
+            if (nonSpaceCount % group.step === 0) {
+              colorizedText += colorKey;
+              colorIndex++;
+            }
+
+            nonSpaceCount++;
           }
 
           colorizedText += selectedText[i];
