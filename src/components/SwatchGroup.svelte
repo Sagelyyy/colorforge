@@ -64,7 +64,7 @@
           const colorKey =
             group.swatches[colorIndex % group.swatches.length].colorKey;
 
-          if (i % group.step === 0) {
+          if (selectedText[i] !== " " && i % group.step === 0) {
             colorizedText += colorKey;
             colorIndex++;
           }
