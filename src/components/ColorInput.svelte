@@ -17,6 +17,7 @@
   let toggleHelp = false;
   let selectedGroup;
   let colorsFromSwatches = [];
+  let outputSize = "650";
 
   selectedGroupStore.subscribe((value) => {
     selectedGroup = value;
@@ -86,8 +87,26 @@
 </script>
 
 <div class="content">
-  <button class="sw-button" on:click={handlePreamble}>Toggle Broadcast</button>
-  <button class="sw-button" on:click={handleHelp}>Help!</button>
+  <div class="interface">
+    <button class="sw-button" on:click={handlePreamble}>Toggle Broadcast</button
+    >
+    <button class="sw-button" on:click={handleHelp}>Help!</button>
+    <div class="output-slider">
+      <p>Output Width</p>
+      <p>{outputSize}px</p>
+      <input
+        type="range"
+        min="1"
+        max="895"
+        bind:value={outputSize}
+        class="slider"
+        list="values"
+      />
+      <datalist id="values">
+        <option value="650" />
+      </datalist>
+    </div>
+  </div>
   {#if toggleHelp}
     <div id="helpBox" transition:fade={{ duration: 300 }}>
       <h2>How to use Colorforge:</h2>
@@ -125,7 +144,11 @@
     on:input={updateColor}
     on:select={updateSelection}
   />
-  <div class="color-output">{@html textOutput}</div>
+  <div class="color-output">
+    <div class="color-width" style="width: {outputSize}px;">
+      {@html textOutput}
+    </div>
+  </div>
 </div>
 
 <style>
@@ -202,5 +225,26 @@
 
   #helpBox p {
     color: var(--offset-color);
+  }
+
+  .output-slider {
+    border-radius: 10px;
+    border: 1px solid var(--background-accent);
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  .output-slider > p {
+    color: var(--lotj-yellow);
+  }
+
+  .interface {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .interface > button {
+    align-self: center;
   }
 </style>
