@@ -41,7 +41,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
     flex-wrap: wrap;
   }
 
@@ -51,5 +51,11 @@
     height: 50px;
     margin: 5px;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.5s;
+  }
+
+  .color-option:hover {
+    scale: 1.2;
   }
 </style>

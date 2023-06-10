@@ -9,9 +9,18 @@
   import SwatchGroup from "./SwatchGroup.svelte";
   import ColorPickerModal from "./ColorPickerModal.svelte";
   import { swatchGroups } from "../swatchStore.js";
+  import { fly } from "svelte/transition";
+  import { tweened } from "svelte/motion";
+  import { cubicOut } from "svelte/easing";
 
+  const pullTabPosition = tweened(0, {
+    duration: 500,
+    easing: cubicOut,
+  });
   let dataStr;
   let selectedSwatch = null;
+  let displaySwatchModal = true;
+  let sgX = 400;
 
   export let colorKeys = Object.keys(colors);
 
@@ -30,14 +39,13 @@
       encodeURIComponent(JSON.stringify($swatchGroups));
   }
 
+  function showSwatchModal() {
+    displaySwatchModal = !displaySwatchModal;
+    pullTabPosition.set(displaySwatchModal ? 0 : sgX);
+  }
+
   function deleteAllPalettes() {
-    $swatchGroups = [
-      {
-        id: nanoid(),
-        step: 1,
-        swatches: [{ id: nanoid(), colorKey: getRandColor() }],
-      },
-    ];
+    $swatchGroups = [];
   }
 
   function importFromJson(e) {
@@ -98,31 +106,51 @@
   }
 </script>
 
-<div class="swatch-content">
-  <a href={dataStr} download="swatch_groups.json" class="sw-button"
-    >Export your colors</a
-  >
-  <p>Import your colors</p>
-  <input
-    class="swatch-import"
-    type="file"
-    accept=".json"
-    on:change={importFromJson}
-  />
-  <button class="sw-button" on:click={addSwatchGroup}>Add Palette</button>
-  <button class="sw-button delete" on:click={deleteAllPalettes}
-    >Clear Palettes</button
-  >
-
-  {#each $swatchGroups as group (group.id)}
-    <SwatchGroup
-      bind:group
-      on:openColorPicker={openColorPicker}
-      on:deleteSwatch={deleteSwatch}
-      on:deleteSwatchGroup={deleteSwatchGroup}
-    />
-  {/each}
+<div
+  on:click={showSwatchModal}
+  class="slideOutTab"
+  style="transform: translate3d({$pullTabPosition}px, 0, 0); right:{sgX}px;"
+>
+  <div>
+    {#if displaySwatchModal}
+      <p>Hide Palettes</p>
+    {:else}
+      <p>Show Palettes</p>
+    {/if}
+  </div>
 </div>
+
+{#if displaySwatchModal}
+  <div
+    class="swatch-content"
+    bind:clientWidth={sgX}
+    transition:fly={{ y: 0, x: 400, duration: 500 }}
+  >
+    <a href={dataStr} download="swatch_groups.json" class="sw-button"
+      >Export your colors</a
+    >
+    <p>Import your colors</p>
+    <input
+      class="swatch-import"
+      type="file"
+      accept=".json"
+      on:change={importFromJson}
+    />
+    <button class="sw-button" on:click={addSwatchGroup}>Add Palette</button>
+    <button class="sw-button delete" on:click={deleteAllPalettes}
+      >Clear Palettes</button
+    >
+
+    {#each $swatchGroups as group (group.id)}
+      <SwatchGroup
+        bind:group
+        on:openColorPicker={openColorPicker}
+        on:deleteSwatch={deleteSwatch}
+        on:deleteSwatchGroup={deleteSwatchGroup}
+      />
+    {/each}
+  </div>
+{/if}
 
 {#if selectedSwatch}
   <ColorPickerModal
@@ -133,13 +161,41 @@
 {/if}
 
 <style>
+  .slideOutTab {
+    z-index: 2;
+    margin-top: 50px;
+    position: absolute;
+    top: 30%;
+    height: 200px;
+    width: 40px;
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    background: var(--lotj-yellow);
+    border-radius: 15px 0px 0px 15px;
+    cursor: pointer;
+  }
+
+  .slideOutTab div {
+    text-align: center;
+    position: relative;
+    right: 70px;
+    top: 90px;
+    background: var(--lotj-yellow);
+    width: 180px;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    writing-mode: lr-tb;
+  }
+
   .swatch-content {
+    z-index: 1;
     padding-top: 1rem;
     background-color: var(--background-accent);
     position: absolute;
     overflow-y: scroll;
     width: 400px;
-    height: 88vh;
+    height: 95vh;
     right: 0;
     top: 0;
     color: white;
@@ -151,7 +207,29 @@
     width: 90%;
   }
 
-  .delete {
-    background-color: rgb(82, 22, 22);
-  }
+  /* @media screen and (max-width: 800px) {
+    .slideOutTab {
+      z-index: 2;
+      margin-top: 50px;
+      position: absolute;
+      bottom: 0;
+      height: 40px;
+      width: 200px;
+      -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      background: var(--lotj-yellow);
+      border-radius: 15px 0px 0px 15px;
+      cursor: pointer;
+    }
+
+    .slideOutTab div {
+      text-align: center;
+      position: relative;
+      right: 70px;
+      top: 90px;
+      background: var(--lotj-yellow);
+      height: 40px;
+      width: 200px;
+    }
+  } */
 </style>

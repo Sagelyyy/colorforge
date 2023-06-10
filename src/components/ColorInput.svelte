@@ -90,7 +90,7 @@
   <button class="sw-button" on:click={handleHelp}>Help!</button>
   {#if toggleHelp}
     <div id="helpBox" transition:fade={{ duration: 300 }}>
-      <h2>How to Use this App:</h2>
+      <h2>How to use Colorforge:</h2>
       <ol>
         <li>Type in your text in the text input field.</li>
         <li>If needed, manually add color tags to your text.</li>
@@ -160,10 +160,11 @@
 
   .color-output {
     border-radius: 10px;
+    overflow-y: auto;
     background-color: black;
     color: white;
     width: 48%;
-    min-height: 250px;
+    height: 250px;
     font-size: 18px;
     line-height: 1.6;
     text-align: left;

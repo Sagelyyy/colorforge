@@ -12,7 +12,6 @@
   import { getRandColor } from "../utils/colors.js";
 
   export let group;
-  export let swatch;
 
   const dispatch = createEventDispatcher();
 
@@ -140,7 +139,7 @@
   }
 
   .swatch-step-container {
-    margin-right: 30px;
+    margin-right: 20px;
     align-self: flex-start;
     flex-grow: 0;
   }
