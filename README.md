@@ -1,5 +1,3 @@
-This is a web app to colorize text in the MUD Legends of The Jedi.
-
 # 🌈 Legends of The Jedi Text Colorizer 🌈
 
 Welcome, future Jedi (or Sith, no judgment here) to the _ultimate_ color previewer for your Legends of The Jedi text adventures! 🚀👾
