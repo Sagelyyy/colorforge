@@ -46,7 +46,6 @@
   }
 
   function applyPalette() {
-    console.log(prevTextStore);
     let textInput;
     textInputStore.update((value) => {
       textInput = value;
