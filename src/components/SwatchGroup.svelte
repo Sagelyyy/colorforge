@@ -6,6 +6,7 @@
     selectedColors,
     textInputStore,
     textSelectionStore,
+    prevTextStore,
   } from "../store.js";
   import { selectedGroupStore } from "../selectedGroupStore.js";
   import { swatchGroups } from "../swatchStore.js";
@@ -33,6 +34,7 @@
 
   function colorize(groupId) {
     selectedGroupStore.set(groupId);
+    prevTextStore.set($textInputStore);
     applyPalette();
 
     const group = $swatchGroups.find(
@@ -44,6 +46,7 @@
   }
 
   function applyPalette() {
+    console.log(prevTextStore);
     let textInput;
     textInputStore.update((value) => {
       textInput = value;

@@ -5,6 +5,7 @@
     textInputStore,
     textSelectionStore,
     selectedColors,
+    prevTextStore,
   } from "../store.js";
   import sanitizeHtml from "sanitize-html";
   import { fade } from "svelte/transition";
@@ -18,6 +19,8 @@
   let selectedGroup;
   let colorsFromSwatches = [];
   let outputSize = "650";
+  let inputX;
+  let inputY;
 
   selectedGroupStore.subscribe((value) => {
     selectedGroup = value;
@@ -34,8 +37,13 @@
     textInput = value;
     updateColor();
   });
+
   const preamble =
     "&YB&Oro&zad&Wc&wa&zst&Oin&Yg N&Oe&zt&ww&zo&Or&Yk [&wCorellia&R(&zPrivate Signal&R)&Y]&z:&w";
+
+  function undoInput() {
+    textInputStore.set($prevTextStore);
+  }
 
   function handleHelp() {
     toggleHelp = !toggleHelp;
@@ -135,18 +143,25 @@
       <p>Enjoy coloring your text with ease!</p>
     </div>
   {/if}
-  <textarea
-    placeholder="Start typing your colors here..."
-    class="color-input"
-    cols="40"
-    rows="10"
-    bind:value={textInput}
-    on:input={updateColor}
-    on:select={updateSelection}
-  />
-  <div class="color-output">
-    <div class="color-width" style="width: {outputSize}px;">
-      {@html textOutput}
+  <div class="color-content">
+    <div class="input-undo">
+      <span on:click={undoInput} class="material-symbols-outlined"> undo </span>
+    </div>
+    <textarea
+      bind:clientWidth={inputX}
+      bind:clientHeight={inputY}
+      placeholder="Start typing your colors here..."
+      class="color-input"
+      cols="40"
+      rows="10"
+      bind:value={textInput}
+      on:input={updateColor}
+      on:select={updateSelection}
+    />
+    <div class="color-output">
+      <div class="color-width" style="width: {outputSize}px;">
+        {@html textOutput}
+      </div>
     </div>
   </div>
 </div>
@@ -158,6 +173,33 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+  }
+
+  .color-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100vw;
+    height: 560px;
+    align-items: center;
+  }
+
+  .input-undo {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    top: 45px;
+    left: 450px;
+    border: 1px solid var(--background-accent);
+    margin-bottom: 5px;
+    cursor: pointer;
+    z-index: 2;
+    transition: all 0.5s;
+    text-align: center;
+  }
+
+  .input-undo:hover {
+    background-color: lightgray;
   }
 
   .color-input:focus {
@@ -172,7 +214,6 @@
     padding: 20px;
     width: 50%;
     box-sizing: border-box;
-    margin-bottom: 20px;
     font-size: 18px;
     resize: none;
   }
@@ -231,7 +272,6 @@
     border-radius: 10px;
     border: 1px solid var(--background-accent);
     padding: 5px;
-    margin-bottom: 10px;
   }
 
   .output-slider > p {
