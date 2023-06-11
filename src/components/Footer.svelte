@@ -7,7 +7,6 @@
 
   function showLove() {
     hearts = [...hearts, { id: nanoid() }];
-    console.log(hearts);
   }
 
   function onHeartEnd(id) {
