@@ -75,6 +75,35 @@
   }
 
   .color-option.highlight {
-    border: 2px solid white;
+    animation: rainbow 1s linear infinite;
+    border: 3px solid;
+    box-sizing: border-box;
+  }
+
+  @keyframes rainbow {
+    0% {
+      border-color: red;
+    }
+    14% {
+      border-color: orange;
+    }
+    28% {
+      border-color: yellow;
+    }
+    42% {
+      border-color: lime;
+    }
+    57% {
+      border-color: aqua;
+    }
+    71% {
+      border-color: blue;
+    }
+    85% {
+      border-color: purple;
+    }
+    100% {
+      border-color: red;
+    }
   }
 </style>

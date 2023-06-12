@@ -28,6 +28,7 @@
   }
 
   .love-class {
+    z-index: 1000;
     position: relative;
     display: inline-block;
     animation: float 0.8s infinite alternate;
