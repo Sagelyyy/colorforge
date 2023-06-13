@@ -201,7 +201,7 @@
     position: absolute;
     overflow-y: scroll;
     width: 400px;
-    height: 95vh;
+    height: 92vh;
     right: 0;
     top: 0;
     color: white;
