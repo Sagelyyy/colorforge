@@ -11,10 +11,60 @@
   import { selectedGroupStore } from "../selectedGroupStore.js";
   import { swatchGroups } from "../swatchStore.js";
   import { getRandColor } from "../utils/colors.js";
+  import { fly } from "svelte/transition";
 
   export let group;
 
+  let draggingSwatch = null;
   const dispatch = createEventDispatcher();
+
+  function handleDragStart(e, swatch) {
+    console.log("Drag started:", swatch);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", JSON.stringify(swatch));
+    draggingSwatch = swatch;
+  }
+
+  function handleDrop(e, swatch) {
+    if (draggingSwatch) {
+      e.preventDefault();
+      const droppedSwatch = JSON.parse(e.dataTransfer.getData("text/plain"));
+
+      swatchGroups.update((groups) => {
+        const groupIndex = groups.findIndex((g) => g.id === group.id);
+
+        // Insert swatch at new position
+        const newSwatchIndex = groups[groupIndex].swatches.findIndex(
+          (sw) => sw.id === swatch.id
+        );
+
+        // Remove swatch from old position
+        const swatchIndex = groups[groupIndex].swatches.findIndex(
+          (sw) => sw.id === draggingSwatch.id
+        );
+
+        if (groupIndex !== -1 && swatchIndex !== -1) {
+          groups[groupIndex].swatches.splice(swatchIndex, 1);
+
+          const insertIndex = newSwatchIndex === 0 ? 0 : newSwatchIndex;
+          groups[groupIndex].swatches.splice(insertIndex, 0, droppedSwatch);
+
+          console.log("After drop:", groups); // Check the updated groups
+        }
+        return [...groups];
+      });
+    }
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    console.log("Drag Over");
+  }
+
+  function handleDragEnd() {
+    draggingSwatch = null;
+    console.log("Drag End");
+  }
 
   function deleteGroup() {
     dispatch("deleteSwatchGroup", group.id);
@@ -110,13 +160,22 @@
       </div>
     </div>
   </div>
-  <div class="swatch-container">
+  <div
+    class="swatch-container"
+    on:dragover={handleDragOver}
+    on:dragend={handleDragEnd}
+  >
     {#each group.swatches as swatch (swatch.id)}
       <SwatchColor
         {swatch}
         {group}
         on:delete={deleteSwatch}
         on:openColorPicker
+        dragEnabled={true}
+        on:dragstart={(e) => handleDragStart(e.detail.event, e.detail.swatch)}
+        on:drop={(e) => handleDrop(e.detail.event, e.detail.swatch)}
+        on:dragend={handleDragEnd}
+        className={swatch === draggingSwatch ? "dragging" : ""}
       />
     {/each}
   </div>

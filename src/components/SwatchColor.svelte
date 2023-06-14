@@ -4,14 +4,26 @@
 
   export let swatch;
   export let group;
+  export let className = "";
+  export let dragEnabled = false;
 
   const dispatch = createEventDispatcher();
 </script>
 
 <div class="swatch-box">
   <div
-    class="swatch"
+    class="swatch {className}"
     style="background-color: {colors[swatch.colorKey]}"
+    draggable={dragEnabled}
+    on:dragstart|stopPropagation={(e) => {
+      dispatch("dragstart", { event: e, swatch: swatch });
+    }}
+    on:drop|stopPropagation={(e) => {
+      dispatch("drop", { event: e, swatch: swatch });
+    }}
+    on:dragend|stopPropagation={() => {
+      dispatch("dragend");
+    }}
     on:click|stopPropagation={() => {
       dispatch("openColorPicker", {
         groupId: group.id,
@@ -29,6 +41,9 @@
 </div>
 
 <style>
+  .dragging {
+    opacity: 0.5;
+  }
   .swatch-box {
     position: relative;
     flex: 1 0 20%;
