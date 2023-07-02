@@ -105,7 +105,7 @@
       <input
         type="range"
         min="1"
-        max="895"
+        max="960"
         bind:value={outputSize}
         class="slider"
         list="values"
@@ -147,18 +147,20 @@
     <div class="input-undo">
       <span on:click={undoInput} class="material-symbols-outlined"> undo </span>
     </div>
-    <textarea
-      bind:clientWidth={inputX}
-      bind:clientHeight={inputY}
-      placeholder="Start typing your colors here..."
-      class="color-input"
-      cols="40"
-      rows="10"
-      bind:value={textInput}
-      on:input={updateColor}
-      on:select={updateSelection}
-      style="width: {outputSize}px;"
-    />
+    <div class="color-input-container">
+      <textarea
+        bind:clientWidth={inputX}
+        bind:clientHeight={inputY}
+        placeholder="Start typing your colors here..."
+        class="color-input"
+        cols="40"
+        rows="10"
+        bind:value={textInput}
+        on:input={updateColor}
+        on:select={updateSelection}
+        style="width: {outputSize}px;"
+      />
+    </div>
     <div class="color-output">
       <div class="color-width" style="width: {outputSize}px;">
         {@html textOutput}
@@ -207,17 +209,29 @@
     outline: none !important;
   }
 
-  .color-input {
+  .color-input-container {
     background-color: var(--primary-background);
     border: 1px solid var(--background-accent);
+    width: 50%;
+    height: 100%;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .color-input {
+    position: absolute;
+    border: none;
+    left: 0;
+    background-color: var(--primary-background);
     color: white;
     border-radius: 10px;
     padding: 20px;
-    width: 50%;
+    width: 100%;
     height: 100%;
     box-sizing: border-box;
     font-size: 18px;
     resize: none;
+    border-right: 1px solid white;
   }
 
   .color-input::placeholder {
@@ -226,6 +240,7 @@
 
   .color-output {
     border-radius: 10px;
+
     overflow-y: auto;
     background-color: black;
     color: white;
@@ -236,6 +251,19 @@
     text-align: left;
     padding: 20px;
     border: 1px solid rgba(255, 255, 0, 0.521);
+    position: relative;
+  }
+
+  .color-width {
+    position: absolute;
+    border-right: 1px solid white;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    padding: 20px;
+    height: 100%;
+    word-wrap: break-word;
+    box-sizing: border-box;
   }
 
   #helpBox {
