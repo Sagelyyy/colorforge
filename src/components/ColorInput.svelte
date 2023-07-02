@@ -100,7 +100,7 @@
     >
     <button class="sw-button" on:click={handleHelp}>Help!</button>
     <div class="output-slider">
-      <p>Output Width</p>
+      <p>Buffer Width</p>
       <p>{outputSize}px</p>
       <input
         type="range"
@@ -157,6 +157,7 @@
       bind:value={textInput}
       on:input={updateColor}
       on:select={updateSelection}
+      style="width: {outputSize}px;"
     />
     <div class="color-output">
       <div class="color-width" style="width: {outputSize}px;">
