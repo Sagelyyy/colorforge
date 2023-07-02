@@ -264,6 +264,7 @@
     height: 100%;
     word-wrap: break-word;
     box-sizing: border-box;
+    overflow-x: scroll;
   }
 
   #helpBox {
