@@ -1,0 +1,12 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ColorVue from "../components/ColorVue.vue";
+import { getRandColor } from "../utils/colors";
+---
+
+<Layout title="Colorforge">
+  <main>
+    <h1 class="font-logo text-center mt-5 text-5xl">Colorforge</h1>
+    <ColorVue client:load />
+  </main>
+</Layout>
