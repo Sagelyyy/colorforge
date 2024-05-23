@@ -1,12 +1,47 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ColorVue from "../components/ColorVue.vue";
-import { getRandColor } from "../utils/colors";
 ---
 
 <Layout title="Colorforge">
   <main>
-    <h1 class="font-logo text-center mt-5 text-5xl">Colorforge</h1>
+    <h1 class="__logo font-logo text-center pt-12 text-5xl">Colorforge</h1>
     <ColorVue client:load />
   </main>
 </Layout>
+
+<style>
+  .__logo {
+    z-index: -1;
+
+    background-image: linear-gradient(
+      90deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00c8,
+      #ff0000
+    );
+    background-size: 200%;
+    animation: gradient 10s ease infinite;
+    mask-image: linear-gradient(rgba(0, 0, 0, 1));
+    background-clip: text;
+    color: transparent;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+</style>
