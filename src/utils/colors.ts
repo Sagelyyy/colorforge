@@ -1,7 +1,3 @@
-export interface ColorTableInterface {
-  [key: string]: string;
-}
-
 export const colorTable = {
   "&r": "rgb(128, 0, 0)",
   "&O": "rgb(128, 128, 0)",
@@ -278,6 +274,12 @@ export const colorTable = {
 
 export function getRandColor() {
   return Object.values(colorTable)[
+    Math.floor(Math.random() * Object.keys(colorTable).length)
+  ];
+}
+
+export function getRandTag() {
+  return Object.keys(colorTable)[
     Math.floor(Math.random() * Object.keys(colorTable).length)
   ];
 }

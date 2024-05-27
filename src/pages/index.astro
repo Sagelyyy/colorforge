@@ -1,10 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ColorVue from "../components/ColorVue.vue";
+import ColorPickerModal from "../components/ColorPickerModal.vue";
 ---
 
 <Layout title="Colorforge">
   <main>
+    <ColorPickerModal client:load />
     <h1 class="__logo font-logo text-center pt-12 text-5xl">Colorforge</h1>
     <ColorVue client:load />
   </main>
