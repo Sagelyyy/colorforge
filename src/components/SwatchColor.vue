@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import { type SwatchInterface } from "../utils/types";
+import { inject, type Ref } from "vue";
+
+const modalState = inject<Ref<boolean>>("modalState");
+
+function toggleModal() {
+  if (!modalState) {
+    throw new Error("modalState not provided");
+  }
+  modalState.value = !modalState.value;
+}
+
 const props = defineProps<{
   swatches: SwatchInterface[];
 }>();
@@ -8,7 +19,9 @@ const props = defineProps<{
 <template>
   <div class="flex flex-col gap-2 justify-center">
     <div class="flex gap-2 justify-center">
-      <button class="self-center bg-slate-700 p-2">Add Color</button>
+      <button class="self-center bg-slate-700 p-2" @click="toggleModal()">
+        Add Color
+      </button>
       <button class="self-center bg-slate-700 p-2">Colorize</button>
       <button class="self-center bg-slate-700 p-2">Delete</button>
     </div>
