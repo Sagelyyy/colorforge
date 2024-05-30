@@ -13,9 +13,10 @@ import { nanoid } from "nanoid";
 
 let modalState = ref(false);
 provide("modalState", modalState);
-let inputModel: Ref = ref("");
+let inputModel = defineModel<string | undefined>("inputModel");
 let outputModel: Ref = ref("");
 let selectedText: Ref = ref({ start: 0, end: 0 });
+// Probalbly set as a provide
 let currentPallete: Ref = ref(loadFromLocalStorage("palletes"));
 
 onMounted(() => {
@@ -38,6 +39,10 @@ watch(currentPallete, () => {
   saveToLocalStorage("palletes", currentPallete.value);
 });
 
+watch(inputModel, () => {
+  findColor(inputModel, colorTable, outputModel);
+});
+
 const boxStyle =
   "bg-black p-4 self-center border border-gray-600 resize-none w-full h-2/6";
 </script>
@@ -57,7 +62,6 @@ const boxStyle =
       :class="boxStyle"
       v-model="inputModel"
       @mouseup="(e) => setUserSelection(e, selectedText)"
-      @input="findColor(inputModel, colorTable, outputModel)"
     ></textarea>
     <div :class="boxStyle">
       <span v-html="outputModel"></span>
