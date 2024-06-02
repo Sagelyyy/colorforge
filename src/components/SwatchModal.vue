@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import type { Ref } from "vue";
+import { inject } from "vue";
 import type { PalleteInterface } from "../utils/types";
 import SwatchColor from "./SwatchColor.vue";
 
-defineProps<{
-  palletes: PalleteInterface[];
-}>();
+const palletes = inject<Ref<PalleteInterface[]>>("currentPallete");
 </script>
 
 <template>
@@ -15,7 +15,6 @@ defineProps<{
       v-for="pallet in palletes"
       :key="pallet.id"
       :swatches="pallet.swatches"
-      client:load
     />
   </div>
 </template>

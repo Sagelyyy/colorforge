@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { type SwatchInterface } from "../utils/types";
+import { type PalleteInterface, type SwatchInterface } from "../utils/types";
 import { inject, type Ref } from "vue";
 
+defineProps<{
+  swatches: SwatchInterface[];
+}>();
+
 const modalState = inject<Ref<boolean>>("modalState");
+const swatchGroup = inject<Ref<SwatchInterface[]>>("swatchGroup");
 
 function toggleModal() {
   if (!modalState) {
@@ -11,15 +16,20 @@ function toggleModal() {
   modalState.value = !modalState.value;
 }
 
-const props = defineProps<{
-  swatches: SwatchInterface[];
-}>();
+function setSwatchGroup(swatches: SwatchInterface[]) {
+  if (swatches) {
+    swatchGroup!.value = swatches;
+  }
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-2 justify-center">
     <div class="flex gap-2 justify-center">
-      <button class="self-center bg-slate-700 p-2" @click="toggleModal()">
+      <button
+        class="self-center bg-slate-700 p-2"
+        @click="[toggleModal(), setSwatchGroup(swatches)]"
+      >
         Add Color
       </button>
       <button class="self-center bg-slate-700 p-2">Colorize</button>
@@ -31,10 +41,10 @@ const props = defineProps<{
   </div>
   <div class="flex gap-2 justify-center">
     <div
-      class="w-10 h-10 border border-black transition-all hover:scale-125 cursor-pointer"
+      v-for="swatch in swatches"
+      class="w-10 h-10 border border-black transition-all cursor-pointer hover:scale-125"
       :style="`background-color: ${swatch.color}`"
-      v-for="swatch in props.swatches"
-      :key="swatch.id"
+      @click="[toggleModal(), setSwatchGroup(swatches)]"
     ></div>
   </div>
 </template>

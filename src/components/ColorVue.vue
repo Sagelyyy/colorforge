@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { colorTable, getRandColor, getRandTag } from "../utils/colors";
+import { colorTable } from "../utils/colors";
 import { ref, provide, type Ref, onMounted, watch } from "vue";
 import SwatchModal from "./SwatchModal.vue";
 import ColorPickerModal from "../components/ColorPickerModal.vue";
 import { loadFromLocalStorage, saveToLocalStorage } from "../utils/store";
+import type { SwatchInterface, PalleteInterface } from "../utils/types";
 import {
   findColor,
   applyColors,
@@ -11,24 +12,38 @@ import {
 } from "../utils/colorFunctions";
 import { nanoid } from "nanoid";
 
-let modalState = ref(false);
+const modalState: Ref<boolean> = ref(false);
+
+const inputModel: Ref = ref("");
+const outputModel: Ref = ref("");
+const selectedText: Ref = ref({ start: 0, end: 0 });
+const swatchGroup: Ref<SwatchInterface[]> = ref([]);
+const currentPallete: Ref = ref(loadFromLocalStorage("palletes"));
+provide("currentPallete", currentPallete);
 provide("modalState", modalState);
-let inputModel = defineModel<string | undefined>("inputModel");
-let outputModel: Ref = ref("");
-let selectedText: Ref = ref({ start: 0, end: 0 });
-// Probalbly set as a provide
-let currentPallete: Ref = ref(loadFromLocalStorage("palletes"));
+provide("swatchGroup", swatchGroup);
 
 onMounted(() => {
   currentPallete.value = loadFromLocalStorage("palletes") || [
     {
       id: nanoid(),
-      step: 1,
+      step: 5,
       swatches: [
         {
           id: nanoid(),
-          color: getRandColor(),
-          tag: getRandTag(),
+          color: "rgb(215, 215, 0)",
+          tag: "&184",
+        },
+      ],
+    },
+    {
+      id: nanoid(),
+      step: 2,
+      swatches: [
+        {
+          id: nanoid(),
+          color: "rgb(0, 255, 135)",
+          tag: "&048",
         },
       ],
     },
@@ -43,28 +58,37 @@ watch(inputModel, () => {
   findColor(inputModel, colorTable, outputModel);
 });
 
+watch(swatchGroup, () => {
+  console.log(`swatchGroup ${JSON.stringify(swatchGroup.value)}`);
+});
+
+function handleclick() {
+  applyColors(currentPallete, selectedText, inputModel, outputModel);
+}
+
+function handleMouse(e: Event) {
+  setUserSelection(e, selectedText);
+  console.log(`handleMouse ${JSON.stringify(selectedText.value)}`);
+}
+
 const boxStyle =
   "bg-black p-4 self-center border border-gray-600 resize-none w-full h-2/6";
 </script>
 
 <template>
-  <ColorPickerModal client:load />
-  <SwatchModal :palletes="currentPallete" client:load />
-  <div class="flex flex-col justify-center gap-6 lg:w-3/5 m-auto h-dvh">
-    <button
-      @click="
-        applyColors(currentPallete, selectedText, inputModel, outputModel)
-      "
-    >
-      Apply
-    </button>
-    <textarea
-      :class="boxStyle"
-      v-model="inputModel"
-      @mouseup="(e) => setUserSelection(e, selectedText)"
-    ></textarea>
-    <div :class="boxStyle">
-      <span v-html="outputModel"></span>
+  <div>
+    <ColorPickerModal />
+    <SwatchModal />
+    <div class="flex flex-col justify-center gap-6 lg:w-3/5 m-auto h-dvh">
+      <button @click="handleclick()">Apply</button>
+      <textarea
+        :class="boxStyle"
+        v-model="inputModel"
+        @mouseup="handleMouse"
+      ></textarea>
+      <div :class="boxStyle">
+        <span v-html="outputModel"></span>
+      </div>
     </div>
   </div>
 </template>
