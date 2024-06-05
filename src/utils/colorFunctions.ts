@@ -32,15 +32,16 @@ export function applyColors(
   pallete: Ref<PalleteInterface[]>,
   selectedText: Ref<{ start: number; end: number }>,
   inputModel: Ref<string>,
-  outputModel: Ref<string | undefined>
+  outputModel: Ref<string | undefined>,
+  swatchIndex: number
 ) {
   const { start, end } = selectedText.value;
   const textSelection = inputModel.value.slice(start, end);
-  const step = pallete.value[0].step;
-  const swatches = pallete.value[0].swatches;
+  const step = pallete.value[swatchIndex].step;
+  const swatches = pallete.value[swatchIndex].swatches;
 
   console.log("applyColors");
-  console.log(`Pallete: ${JSON.stringify(pallete.value[0])}`);
+  console.log(`Pallete: ${JSON.stringify(pallete.value)}`);
   console.log(`Step: ${step}`);
   console.log(`Swatches: ${JSON.stringify(swatches)}`);
 
@@ -61,20 +62,23 @@ export function colorizeText(
   console.log("colorizeText");
   console.log(`Step: ${step}`);
   console.log(`Swatches: ${JSON.stringify(swatches)}`);
+
   let result = swatches[0].tag;
   let nonSpaceCount = 0;
   let swatchIndex = 0;
 
   for (let i = 0; i < text.length; i++) {
+    result += text[i];
+
     if (text[i] !== " ") {
       nonSpaceCount++;
     }
-    if (nonSpaceCount > 0 && nonSpaceCount % step === 0) {
+
+    if (nonSpaceCount % step === 0 && nonSpaceCount > 0) {
       swatchIndex = (swatchIndex + 1) % swatches.length;
       result += swatches[swatchIndex].tag;
-      nonSpaceCount = 0;
     }
-    result += text[i];
   }
+
   return result;
 }

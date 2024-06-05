@@ -12,3 +12,9 @@ export interface SwatchInterface {
   color: string;
   tag: string;
 }
+
+export interface modalState {
+  isOpen: boolean;
+  mode: "add" | "edit" | "delete";
+  colorId?: string;
+}

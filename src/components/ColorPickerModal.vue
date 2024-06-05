@@ -1,30 +1,52 @@
 <script setup lang="ts">
 import { colorTable } from "../utils/colors";
 import { type Ref, inject, onMounted } from "vue";
-import type { SwatchInterface, PalleteInterface } from "../utils/types";
+import type {
+  SwatchInterface,
+  PalleteInterface,
+  modalState,
+} from "../utils/types";
 import { nanoid } from "nanoid";
 import { saveToLocalStorage } from "../utils/store";
 
-const modalState = inject<Ref<boolean>>("modalState");
+const modalState = inject<Ref<modalState>>("modalState");
 const swatchGroup = inject<Ref<SwatchInterface[]>>("swatchGroup");
 const currentPallete = inject<Ref<PalleteInterface[]>>("currentPallete");
 
 function toggleModal() {
-  if (!modalState) {
-    throw new Error("modalState not provided");
-  }
-  modalState.value = !modalState.value;
+  modalState!.value.isOpen = !modalState!.value.isOpen;
 }
 
 function updateSwatches(color: string, tag: string) {
-  const newSwatch: SwatchInterface = {
-    id: nanoid(),
-    color,
-    tag,
-  };
+  console.log(`updateSwatches ${color} ${tag}`);
+  console.log(modalState?.value);
+  if (modalState?.value.mode === "add") {
+    const newSwatch: SwatchInterface = {
+      id: nanoid(),
+      color,
+      tag,
+    };
 
-  swatchGroup!.value.push(newSwatch);
-  updatePallete();
+    swatchGroup!.value.push(newSwatch);
+    updatePallete();
+  } else if (modalState?.value.mode === "edit") {
+    console.log("edit mode");
+    swatchGroup?.value.forEach((swatch) => {
+      if (swatch.id === modalState?.value.colorId) {
+        swatch.color = color;
+        swatch.tag = tag;
+      }
+    });
+    updatePallete();
+  } else if (modalState?.value.mode === "delete") {
+    console.log("delete mode");
+    swatchGroup?.value.forEach((swatch, index) => {
+      if (swatch.id === modalState?.value.colorId) {
+        swatchGroup?.value.splice(index, 1);
+      }
+    });
+    updatePallete();
+  }
 }
 
 function updatePallete() {
@@ -40,7 +62,7 @@ function updatePallete() {
 
 <template>
   <div
-    v-show="modalState"
+    v-show="modalState?.isOpen"
     class="flex flex-wrap gap-2 justify-center z-10 absolute top-0 left-0"
   >
     <div

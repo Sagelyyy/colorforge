@@ -4,16 +4,16 @@ import { ref, provide, type Ref, onMounted, watch } from "vue";
 import SwatchModal from "./SwatchModal.vue";
 import ColorPickerModal from "../components/ColorPickerModal.vue";
 import { loadFromLocalStorage, saveToLocalStorage } from "../utils/store";
-import type { SwatchInterface, PalleteInterface } from "../utils/types";
-import {
-  findColor,
-  applyColors,
-  setUserSelection,
-} from "../utils/colorFunctions";
+import type {
+  SwatchInterface,
+  PalleteInterface,
+  modalState,
+} from "../utils/types";
+import { findColor, setUserSelection } from "../utils/colorFunctions";
 import { nanoid } from "nanoid";
 
-const modalState: Ref<boolean> = ref(false);
-
+const modalState: Ref<modalState> = ref({ isOpen: false, mode: "add" });
+const swatchModalState: Ref<boolean> = ref(true);
 const inputModel: Ref = ref("");
 const outputModel: Ref = ref("");
 const selectedText: Ref = ref({ start: 0, end: 0 });
@@ -22,6 +22,9 @@ const currentPallete: Ref = ref(loadFromLocalStorage("palletes"));
 provide("currentPallete", currentPallete);
 provide("modalState", modalState);
 provide("swatchGroup", swatchGroup);
+provide("selectedText", selectedText);
+provide("inputModel", inputModel);
+provide("outputModel", outputModel);
 
 onMounted(() => {
   currentPallete.value = loadFromLocalStorage("palletes") || [
@@ -62,13 +65,13 @@ watch(swatchGroup, () => {
   console.log(`swatchGroup ${JSON.stringify(swatchGroup.value)}`);
 });
 
-function handleclick() {
-  applyColors(currentPallete, selectedText, inputModel, outputModel);
-}
-
 function handleMouse(e: Event) {
   setUserSelection(e, selectedText);
   console.log(`handleMouse ${JSON.stringify(selectedText.value)}`);
+}
+
+function handleSwatchModal() {
+  swatchModalState.value = !swatchModalState.value;
 }
 
 const boxStyle =
@@ -78,9 +81,11 @@ const boxStyle =
 <template>
   <div>
     <ColorPickerModal />
-    <SwatchModal />
+    <SwatchModal v-if="swatchModalState" />
     <div class="flex flex-col justify-center gap-6 lg:w-3/5 m-auto h-dvh">
-      <button @click="handleclick()">Apply</button>
+      <button @click="handleSwatchModal" class="self-center bg-slate-700 p-2">
+        Show Swatches
+      </button>
       <textarea
         :class="boxStyle"
         v-model="inputModel"
