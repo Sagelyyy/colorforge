@@ -41,19 +41,39 @@ function handleClick(
   id: string | undefined,
   swatches: SwatchInterface[]
 ) {
-  if (mode === "add" || mode === "edit") {
-    toggleModal(mode, id);
-    setSwatchGroup(swatches);
-  }
-
   if (mode === "delete") {
     console.log(`delete ${id}`);
-    currentPallete?.value.filter((pallete) => {
+    let isPallete;
+    currentPallete?.value.forEach((pallete) => {
       if (pallete.id === id) {
-        currentPallete?.value.splice(currentPallete?.value.indexOf(pallete), 1);
-        saveToLocalStorage("palletes", currentPallete!.value);
+        isPallete = true;
+      } else {
+        isPallete = false;
       }
     });
+    if (isPallete) {
+      currentPallete?.value.filter((pallete) => {
+        if (pallete.id === id) {
+          currentPallete?.value.splice(
+            currentPallete?.value.indexOf(pallete),
+            1
+          );
+          saveToLocalStorage("palletes", currentPallete!.value);
+          return;
+        }
+      });
+    } else {
+      swatchGroup?.value.filter((swatch) => {
+        if (swatch.id === id) {
+          swatchGroup?.value.splice(swatchGroup?.value.indexOf(swatch), 1);
+          saveToLocalStorage("palletes", currentPallete!.value);
+          return;
+        }
+      });
+    }
+  } else if (mode === "add" || mode === "edit") {
+    toggleModal(mode, id);
+    setSwatchGroup(swatches);
   }
 }
 
@@ -101,11 +121,12 @@ function handleStep(e: Event, palleteId: string) {
         Delete
       </button>
     </div>
-    <span
+    <span class="self-center text-center flex gap-2 justify-center"
       >Color every
       <input
-        class="text-black"
+        class="text-black self-center text-center w-16"
         type="number"
+        min="1"
         v-model="currentPallete![currentIndex].step"
         @change="handleStep($event, currentPallete![currentIndex].id)"
       />
@@ -115,9 +136,17 @@ function handleStep(e: Event, palleteId: string) {
   <div class="flex gap-2 justify-center flex-wrap">
     <div
       v-for="swatch in swatches"
-      class="w-10 h-10 border border-black transition-all cursor-pointer hover:scale-125"
+      :key="swatch.id"
+      class="w-10 h-10 border border-black transition-all cursor-pointer hover:scale-125 flex justify-end"
       :style="`background-color: ${swatch.color}`"
-      @click="handleClick('edit', swatch.id, swatches)"
-    ></div>
+      @click.self="handleClick('edit', swatch.id, swatches)"
+    >
+      <span
+        class="material-symbols-outlined pt-2 text-md hover:bg-red-400"
+        @click.self="handleClick('delete', swatch.id, swatches)"
+      >
+        delete
+      </span>
+    </div>
   </div>
 </template>

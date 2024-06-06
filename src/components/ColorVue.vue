@@ -74,8 +74,8 @@ function handleSwatchModal() {
   swatchModalState.value = !swatchModalState.value;
 }
 
-const boxStyle =
-  "bg-black p-4 self-center border border-gray-600 resize-none w-full h-2/6";
+const boxStyle = `bg-black p-4 self-center border border-gray-600 
+  resize-none w-full h-2/6 `;
 </script>
 
 <template>
