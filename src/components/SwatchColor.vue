@@ -41,8 +41,8 @@ function handleClick(
   id: string | undefined,
   swatches: SwatchInterface[]
 ) {
+  setSwatchGroup(swatches);
   if (mode === "delete") {
-    console.log(`delete ${id}`);
     let isPallete;
     currentPallete?.value.forEach((pallete) => {
       if (pallete.id === id) {
@@ -52,6 +52,7 @@ function handleClick(
       }
     });
     if (isPallete) {
+      console.log(`delete pallete ${id}`);
       currentPallete?.value.filter((pallete) => {
         if (pallete.id === id) {
           currentPallete?.value.splice(
@@ -59,21 +60,19 @@ function handleClick(
             1
           );
           saveToLocalStorage("palletes", currentPallete!.value);
-          return;
         }
       });
-    } else {
+    } else if (!isPallete) {
+      console.log(`delete swatch ${id}`);
       swatchGroup?.value.filter((swatch) => {
         if (swatch.id === id) {
           swatchGroup?.value.splice(swatchGroup?.value.indexOf(swatch), 1);
           saveToLocalStorage("palletes", currentPallete!.value);
-          return;
         }
       });
     }
   } else if (mode === "add" || mode === "edit") {
     toggleModal(mode, id);
-    setSwatchGroup(swatches);
   }
 }
 
@@ -137,12 +136,12 @@ function handleStep(e: Event, palleteId: string) {
     <div
       v-for="swatch in swatches"
       :key="swatch.id"
-      class="w-10 h-10 border border-black transition-all cursor-pointer hover:scale-125 flex justify-end"
+      class="w-12 h-12 border border-black transition-all cursor-pointer hover:scale-125 flex justify-end group"
       :style="`background-color: ${swatch.color}`"
       @click.self="handleClick('edit', swatch.id, swatches)"
     >
       <span
-        class="material-symbols-outlined pt-2 text-md hover:bg-red-400"
+        class="material-symbols-outlined pt-3 text-[1.3rem] bg-red-400 group-hover:visible invisible"
         @click.self="handleClick('delete', swatch.id, swatches)"
       >
         delete
