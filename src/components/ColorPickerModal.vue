@@ -17,6 +17,10 @@ function toggleModal() {
   modalState!.value.isOpen = !modalState!.value.isOpen;
 }
 
+function isInSwatchGroup(tag: string) {
+  return swatchGroup?.value.some((swatch) => swatch.tag === tag);
+}
+
 function updateSwatches(color: string, tag: string) {
   console.log(`updateSwatches ${color} ${tag}`);
   console.log(modalState?.value);
@@ -63,15 +67,51 @@ function updatePallete() {
 <template>
   <div
     v-show="modalState?.isOpen"
-    class="flex flex-wrap gap-2 justify-center z-10 absolute top-0 left-0"
+    class="flex flex-wrap gap-4 justify-center z-10 absolute top-0 left-0 h-dvh backdrop-blur-md overflow-x-auto"
   >
     <div
       v-for="(value, name, index) in colorTable"
       :key="index"
-      class="w-10 h-10 border border-black transition-all cursor-pointer hover:scale-125"
+      class="z-10 w-10 h-10 border border-black transition-all cursor-pointer hover:scale-125"
+      :class="isInSwatchGroup(name) ? 'highlight border-2' : ''"
       :name="name"
       :style="`background-color: ${value}`"
       @click="[toggleModal(), updateSwatches(value, name)]"
     ></div>
   </div>
 </template>
+
+<style>
+.highlight {
+  animation: rainbow 1s linear infinite;
+  border: 3px solid;
+  box-sizing: border-box;
+}
+
+@keyframes rainbow {
+  0% {
+    border-color: red;
+  }
+  14% {
+    border-color: orange;
+  }
+  28% {
+    border-color: yellow;
+  }
+  42% {
+    border-color: lime;
+  }
+  57% {
+    border-color: aqua;
+  }
+  71% {
+    border-color: blue;
+  }
+  85% {
+    border-color: purple;
+  }
+  100% {
+    border-color: red;
+  }
+}
+</style>

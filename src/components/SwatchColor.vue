@@ -42,37 +42,37 @@ function handleClick(
   swatches: SwatchInterface[]
 ) {
   setSwatchGroup(swatches);
+
   if (mode === "delete") {
-    let isPallete;
-    currentPallete?.value.forEach((pallete) => {
-      if (pallete.id === id) {
-        isPallete = true;
-      } else {
-        isPallete = false;
-      }
-    });
-    if (isPallete) {
-      console.log(`delete pallete ${id}`);
-      currentPallete?.value.filter((pallete) => {
-        if (pallete.id === id) {
-          currentPallete?.value.splice(
-            currentPallete?.value.indexOf(pallete),
-            1
-          );
-          saveToLocalStorage("palletes", currentPallete!.value);
-        }
-      });
-    } else if (!isPallete) {
-      console.log(`delete swatch ${id}`);
-      swatchGroup?.value.filter((swatch) => {
-        if (swatch.id === id) {
-          swatchGroup?.value.splice(swatchGroup?.value.indexOf(swatch), 1);
-          saveToLocalStorage("palletes", currentPallete!.value);
-        }
-      });
-    }
+    deleteItem(id);
   } else if (mode === "add" || mode === "edit") {
     toggleModal(mode, id);
+  }
+}
+
+function deleteItem(id: string | undefined) {
+  if (!id) return;
+
+  const isPallete = currentPallete?.value.some((pallete) => pallete.id === id);
+
+  if (isPallete) {
+    console.log(`delete pallete ${id}`);
+    const palleteIndex = currentPallete?.value.findIndex(
+      (pallete) => pallete.id === id
+    );
+    if (palleteIndex !== undefined && palleteIndex !== -1) {
+      currentPallete?.value.splice(palleteIndex, 1);
+      saveToLocalStorage("palletes", currentPallete!.value);
+    }
+  } else {
+    console.log(`delete swatch ${id}`);
+    const swatchIndex = swatchGroup?.value.findIndex(
+      (swatch) => swatch.id === id
+    );
+    if (swatchIndex !== undefined && swatchIndex !== -1) {
+      swatchGroup?.value.splice(swatchIndex, 1);
+      saveToLocalStorage("palletes", currentPallete!.value);
+    }
   }
 }
 
@@ -132,7 +132,9 @@ function handleStep(e: Event, palleteId: string) {
       letters
     </span>
   </div>
-  <div class="flex gap-2 justify-center flex-wrap">
+  <div
+    class="flex gap-2 justify-center flex-wrap border-b-2 border-b-slate-700 pb-2"
+  >
     <div
       v-for="swatch in swatches"
       :key="swatch.id"

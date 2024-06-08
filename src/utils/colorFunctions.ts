@@ -1,4 +1,4 @@
-import { type ModelRef, type Ref } from "vue";
+import { type Ref } from "vue";
 import {
   type ColorTableInterface,
   type PalleteInterface,
@@ -16,6 +16,16 @@ export function findColor(
     const color = colors[match];
     return color ? `</span><span style="color: ${color}">` : match;
   });
+}
+
+export function removeColors(
+  input: Ref<string>,
+  output: Ref<string | undefined>
+) {
+  console.log("removeColors");
+  console.log(`Input: ${input.value}`);
+  input.value = input.value.replace(/&[0-9]{3}|&[a-zA-Z]/g, "");
+  output.value = input.value;
 }
 
 export function setUserSelection(
@@ -40,10 +50,10 @@ export function applyColors(
   const step = pallete.value[swatchIndex].step;
   const swatches = pallete.value[swatchIndex].swatches;
 
-  console.log("applyColors");
-  console.log(`Pallete: ${JSON.stringify(pallete.value)}`);
-  console.log(`Step: ${step}`);
-  console.log(`Swatches: ${JSON.stringify(swatches)}`);
+  // console.log("applyColors");
+  // console.log(`Pallete: ${JSON.stringify(pallete.value)}`);
+  // console.log(`Step: ${step}`);
+  // console.log(`Swatches: ${JSON.stringify(swatches)}`);
 
   const colorizedText = colorizeText(textSelection, step, swatches);
 
