@@ -1,7 +1,7 @@
 import { type Ref } from "vue";
 import {
   type ColorTableInterface,
-  type PalleteInterface,
+  type PaletteInterface,
   type SwatchInterface,
 } from "../utils/types";
 import { colorTable } from "../utils/colors";
@@ -39,7 +39,7 @@ export function setUserSelection(
 }
 
 export function applyColors(
-  pallete: Ref<PalleteInterface[]>,
+  Palette: Ref<PaletteInterface[]>,
   selectedText: Ref<{ start: number; end: number }>,
   inputModel: Ref<string>,
   outputModel: Ref<string | undefined>,
@@ -47,11 +47,11 @@ export function applyColors(
 ) {
   const { start, end } = selectedText.value;
   const textSelection = inputModel.value.slice(start, end);
-  const step = pallete.value[swatchIndex].step;
-  const swatches = pallete.value[swatchIndex].swatches;
+  const step = Palette.value[swatchIndex].step;
+  const swatches = Palette.value[swatchIndex].swatches;
 
   // console.log("applyColors");
-  // console.log(`Pallete: ${JSON.stringify(pallete.value)}`);
+  // console.log(`Palette: ${JSON.stringify(Palette.value)}`);
   // console.log(`Step: ${step}`);
   // console.log(`Swatches: ${JSON.stringify(swatches)}`);
 

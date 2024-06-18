@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  type PalleteInterface,
+  type PaletteInterface,
   type SwatchInterface,
   type modalState,
 } from "../utils/types";
@@ -15,7 +15,7 @@ defineProps<{
 
 const modalState = inject<Ref<modalState>>("modalState");
 const swatchGroup = inject<Ref<SwatchInterface[]>>("swatchGroup");
-const currentPallete = inject<Ref<PalleteInterface[]>>("currentPallete");
+const currentPalette = inject<Ref<PaletteInterface[]>>("currentPalette");
 const selectedText =
   inject<Ref<{ start: number; end: number }>>("selectedText");
 const inputModel = inject<Ref<string>>("inputModel");
@@ -53,16 +53,16 @@ function handleClick(
 function deleteItem(id: string | undefined) {
   if (!id) return;
 
-  const isPallete = currentPallete?.value.some((pallete) => pallete.id === id);
+  const isPalette = currentPalette?.value.some((Palette) => Palette.id === id);
 
-  if (isPallete) {
-    console.log(`delete pallete ${id}`);
-    const palleteIndex = currentPallete?.value.findIndex(
-      (pallete) => pallete.id === id
+  if (isPalette) {
+    console.log(`delete Palette ${id}`);
+    const PaletteIndex = currentPalette?.value.findIndex(
+      (Palette) => Palette.id === id
     );
-    if (palleteIndex !== undefined && palleteIndex !== -1) {
-      currentPallete?.value.splice(palleteIndex, 1);
-      saveToLocalStorage("palletes", currentPallete!.value);
+    if (PaletteIndex !== undefined && PaletteIndex !== -1) {
+      currentPalette?.value.splice(PaletteIndex, 1);
+      saveToLocalStorage("Palettes", currentPalette!.value);
     }
   } else {
     console.log(`delete swatch ${id}`);
@@ -71,14 +71,14 @@ function deleteItem(id: string | undefined) {
     );
     if (swatchIndex !== undefined && swatchIndex !== -1) {
       swatchGroup?.value.splice(swatchIndex, 1);
-      saveToLocalStorage("palletes", currentPallete!.value);
+      saveToLocalStorage("Palettes", currentPalette!.value);
     }
   }
 }
 
 function handleColorize(swatchIndex: number) {
   applyColors(
-    currentPallete!,
+    currentPalette!,
     selectedText!,
     inputModel!,
     outputModel!,
@@ -86,11 +86,11 @@ function handleColorize(swatchIndex: number) {
   );
 }
 
-function handleStep(e: Event, palleteId: string) {
-  currentPallete?.value.forEach((pallete) => {
-    if (pallete.id === palleteId) {
-      pallete.step = Number((e.target as HTMLInputElement).value);
-      saveToLocalStorage("palletes", currentPallete!.value);
+function handleStep(e: Event, PaletteId: string) {
+  currentPalette?.value.forEach((Palette) => {
+    if (Palette.id === PaletteId) {
+      Palette.step = Number((e.target as HTMLInputElement).value);
+      saveToLocalStorage("Palettes", currentPalette!.value);
     }
   });
 }
@@ -114,7 +114,7 @@ function handleStep(e: Event, palleteId: string) {
       <button
         class="self-center bg-slate-700 p-2"
         @click="
-          handleClick('delete', currentPallete![currentIndex].id, swatches)
+          handleClick('delete', currentPalette![currentIndex].id, swatches)
         "
       >
         Delete
@@ -126,8 +126,8 @@ function handleStep(e: Event, palleteId: string) {
         class="text-black self-center text-center w-16"
         type="number"
         min="1"
-        v-model="currentPallete![currentIndex].step"
-        @change="handleStep($event, currentPallete![currentIndex].id)"
+        v-model="currentPalette![currentIndex].step"
+        @change="handleStep($event, currentPalette![currentIndex].id)"
       />
       letters
     </span>

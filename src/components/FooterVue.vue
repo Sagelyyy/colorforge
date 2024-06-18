@@ -2,7 +2,7 @@
 
 <template>
   <footer
-    class="w-dvw h-8 absolute left-0 right-0 bottom-0 bg-zinc-800 z-0 flex justify-center select-none"
+    class="w-dvw h-8 absolute left-0 right-0 bottom-0 bg-zinc-800 z-10 flex justify-center select-none"
   >
     <p>
       Made with <span class="cursor-pointer love" @click="">💖</span> by Chris

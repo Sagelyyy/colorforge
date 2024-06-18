@@ -1,7 +1,7 @@
 export interface ColorTableInterface {
   [key: string]: string;
 }
-export interface PalleteInterface {
+export interface PaletteInterface {
   id: string;
   step: number;
   swatches: SwatchInterface[];
@@ -13,7 +13,7 @@ export interface SwatchInterface {
   tag: string;
 }
 
-export interface modalState {
+export interface ModalStateInterface {
   isOpen: boolean;
   mode: "add" | "edit" | "delete";
   colorId?: string;
