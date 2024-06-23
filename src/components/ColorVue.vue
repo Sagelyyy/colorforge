@@ -65,11 +65,8 @@ watch(inputModel, () => {
   findColor(inputModel, colorTable, outputModel);
 });
 
-watch(swatchGroup, () => {
-  console.log(`swatchGroup ${JSON.stringify(swatchGroup.value)}`);
-});
-
 function handleMouse(e: Event) {
+  // Capture user selection in textarea
   setUserSelection(e, selectedText);
   console.log(`handleMouse ${JSON.stringify(selectedText.value)}`);
 }
@@ -114,14 +111,11 @@ const boxStyle = `bg-black p-4 self-center border border-gray-600
         v-show="swatchModalState"
         :handleImport="handleImport"
         :handleSwatchModal="handleSwatchModal"
+        :handleRemove="handleRemove"
       />
     </Transition>
     <div class="flex flex-col justify-center gap-6 m-auto h-dvh -mt-10">
-      <div class="flex gap-2 justify-center">
-        <button @click="handleRemove" class="self-center bg-slate-700 p-2">
-          Remove Colors
-        </button>
-      </div>
+      <div class="flex gap-2 justify-center"></div>
       <textarea
         :class="boxStyle"
         v-model="inputModel"

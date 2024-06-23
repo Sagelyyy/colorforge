@@ -2,7 +2,7 @@
 import {
   type PaletteInterface,
   type SwatchInterface,
-  type modalState,
+  type ModalStateInterface,
 } from "../utils/types";
 import { inject, type Ref } from "vue";
 import { applyColors } from "../utils/colorFunctions";
@@ -13,7 +13,7 @@ defineProps<{
   currentIndex: number;
 }>();
 
-const modalState = inject<Ref<modalState>>("modalState");
+const modalState = inject<Ref<ModalStateInterface>>("modalState");
 const swatchGroup = inject<Ref<SwatchInterface[]>>("swatchGroup");
 const currentPalette = inject<Ref<PaletteInterface[]>>("currentPalette");
 const selectedText =
@@ -27,6 +27,7 @@ function toggleModal(mode: "add" | "edit" | "delete", id?: string) {
     modalState!.value.mode = mode;
     modalState!.value.colorId = id;
   } else if (mode === "delete") {
+    return;
   }
 }
 

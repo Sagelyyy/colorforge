@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { colorTable } from "../utils/colors";
-import { type Ref, inject, onMounted } from "vue";
+import { type Ref, inject } from "vue";
 import type {
   SwatchInterface,
   PaletteInterface,
-  modalState,
+  ModalStateInterface,
 } from "../utils/types";
 import { nanoid } from "nanoid";
 import { saveToLocalStorage } from "../utils/store";
 
-const modalState = inject<Ref<modalState>>("modalState");
+const modalState = inject<Ref<ModalStateInterface>>("modalState");
 const swatchGroup = inject<Ref<SwatchInterface[]>>("swatchGroup");
 const currentPalette = inject<Ref<PaletteInterface[]>>("currentPalette");
 
