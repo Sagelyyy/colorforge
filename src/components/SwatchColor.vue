@@ -57,7 +57,7 @@ function deleteItem(id: string | undefined) {
   const isPalette = currentPalette?.value.some((Palette) => Palette.id === id);
 
   if (isPalette) {
-    console.log(`delete Palette ${id}`);
+    `delete Palette ${id}`;
     const PaletteIndex = currentPalette?.value.findIndex(
       (Palette) => Palette.id === id
     );
@@ -66,7 +66,7 @@ function deleteItem(id: string | undefined) {
       saveToLocalStorage("Palettes", currentPalette!.value);
     }
   } else {
-    console.log(`delete swatch ${id}`);
+    `delete swatch ${id}`;
     const swatchIndex = swatchGroup?.value.findIndex(
       (swatch) => swatch.id === id
     );

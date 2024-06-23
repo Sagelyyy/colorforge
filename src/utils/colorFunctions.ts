@@ -22,8 +22,8 @@ export function removeColors(
   input: Ref<string>,
   output: Ref<string | undefined>
 ) {
-  console.log("removeColors");
-  console.log(`Input: ${input.value}`);
+  ("removeColors");
+  `Input: ${input.value}`;
   input.value = input.value.replace(/&[0-9]{3}|&[a-zA-Z]/g, "");
   output.value = input.value;
 }
@@ -50,10 +50,10 @@ export function applyColors(
   const step = Palette.value[swatchIndex].step;
   const swatches = Palette.value[swatchIndex].swatches;
 
-  // console.log("applyColors");
-  // console.log(`Palette: ${JSON.stringify(Palette.value)}`);
-  // console.log(`Step: ${step}`);
-  // console.log(`Swatches: ${JSON.stringify(swatches)}`);
+  // ("applyColors");
+  // (`Palette: ${JSON.stringify(Palette.value)}`);
+  // (`Step: ${step}`);
+  // (`Swatches: ${JSON.stringify(swatches)}`);
 
   const colorizedText = colorizeText(textSelection, step, swatches);
 
@@ -69,9 +69,9 @@ export function colorizeText(
   step: number,
   swatches: SwatchInterface[]
 ): string {
-  console.log("colorizeText");
-  console.log(`Step: ${step}`);
-  console.log(`Swatches: ${JSON.stringify(swatches)}`);
+  ("colorizeText");
+  `Step: ${step}`;
+  `Swatches: ${JSON.stringify(swatches)}`;
 
   let result = swatches[0].tag;
   let nonSpaceCount = 0;

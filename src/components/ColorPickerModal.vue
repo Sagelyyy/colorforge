@@ -22,8 +22,8 @@ function isInSwatchGroup(tag: string) {
 }
 
 function updateSwatches(color: string, tag: string) {
-  console.log(`updateSwatches ${color} ${tag}`);
-  console.log(modalState?.value);
+  `updateSwatches ${color} ${tag}`;
+  modalState?.value;
   if (modalState?.value.mode === "add") {
     const newSwatch: SwatchInterface = {
       id: nanoid(),
@@ -34,7 +34,7 @@ function updateSwatches(color: string, tag: string) {
     swatchGroup!.value.push(newSwatch);
     updatePalette();
   } else if (modalState?.value.mode === "edit") {
-    console.log("edit mode");
+    ("edit mode");
     swatchGroup?.value.forEach((swatch) => {
       if (swatch.id === modalState?.value.colorId) {
         swatch.color = color;
@@ -43,7 +43,7 @@ function updateSwatches(color: string, tag: string) {
     });
     updatePalette();
   } else if (modalState?.value.mode === "delete") {
-    console.log("delete mode");
+    ("delete mode");
     swatchGroup?.value.forEach((swatch, index) => {
       if (swatch.id === modalState?.value.colorId) {
         swatchGroup?.value.splice(index, 1);

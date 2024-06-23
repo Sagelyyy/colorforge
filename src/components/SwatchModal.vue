@@ -15,13 +15,13 @@ defineProps<{
 }>();
 
 function addNewPalette() {
-  console.log("addNewPalette");
+  ("addNewPalette");
   Palettes?.value.push({ id: nanoid(), step: 1, swatches: [] });
   saveToLocalStorage("Palettes", Palettes!.value);
 }
 
 function clearPalettes() {
-  console.log("clearPalettes");
+  ("clearPalettes");
   Palettes!.value = [];
   saveToLocalStorage("Palettes", Palettes!.value);
 }
