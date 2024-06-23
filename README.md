@@ -37,10 +37,6 @@ Welcome to **ColorForge**! This web app is your ultimate tool for previewing col
 
 We welcome contributions! If you have ideas or improvements, feel free to fork the repository and submit a pull request. Let's make ColorForge even better together!
 
-## License 📜
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments 🙏
 
 - **Legends of the Jedi**: The amazing MUD game that inspired this project.
