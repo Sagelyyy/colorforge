@@ -6,6 +6,7 @@ import SwatchColor from "./SwatchColor.vue";
 import { nanoid } from "nanoid";
 import { saveToLocalStorage } from "../utils/store";
 import ButtonVue from "./ButtonVue.vue";
+import { Base64 } from "js-base64";
 const Palettes = inject<Ref<PaletteInterface[]>>("currentPalette");
 
 defineProps<{
@@ -24,6 +25,19 @@ function clearPalettes() {
   ("clearPalettes");
   Palettes!.value = [];
   saveToLocalStorage("Palettes", Palettes!.value);
+}
+
+function importPalette() {
+  navigator.clipboard.readText().then((text) => {
+    if (Base64.isValid(text)) {
+      const newPalette = JSON.parse(Base64.decode(text));
+      newPalette.id = nanoid();
+      Palettes?.value.push(newPalette);
+      saveToLocalStorage("Palettes", Palettes!.value);
+    } else {
+      alert("Invalid palette string");
+    }
+  });
 }
 </script>
 
@@ -58,6 +72,13 @@ function clearPalettes() {
           :hoverColor="'hover:bg-green-600'"
           :materialIcon="'add_circle'"
           :hoverText="'Add new palette'"
+        />
+        <ButtonVue
+          :click="() => importPalette()"
+          :bgColor="'bg-blue-500'"
+          :hoverColor="'hover:bg-blue-600'"
+          :materialIcon="'file_upload'"
+          :hoverText="'Import swatch from clipboard'"
         />
         <ButtonVue
           :click="() => handleRemove()"

@@ -7,6 +7,8 @@ import {
 import { inject, type Ref } from "vue";
 import { applyColors } from "../utils/colorFunctions";
 import { saveToLocalStorage } from "../utils/store";
+import { Base64 } from "js-base64";
+import ButtonVue from "./ButtonVue.vue";
 
 defineProps<{
   swatches: SwatchInterface[];
@@ -95,31 +97,48 @@ function handleStep(e: Event, PaletteId: string) {
     }
   });
 }
+
+function handleShare(PaletteId: string) {
+  currentPalette?.value.forEach((Palette) => {
+    if (Palette.id === PaletteId) {
+      const encodedPalette = Base64.encode(JSON.stringify(Palette));
+      navigator.clipboard.writeText(encodedPalette);
+    }
+  });
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-2 justify-center">
     <div class="flex gap-2 justify-center">
-      <button
-        class="self-center bg-slate-700 p-2"
-        @click="handleClick('add', undefined, swatches)"
-      >
-        Add Color
-      </button>
-      <button
-        @click="handleColorize(currentIndex)"
-        class="self-center bg-slate-700 p-2"
-      >
-        Colorize
-      </button>
-      <button
-        class="self-center bg-slate-700 p-2"
-        @click="
-          handleClick('delete', currentPalette![currentIndex].id, swatches)
-        "
-      >
-        Delete
-      </button>
+      <ButtonVue
+        :click="() => handleClick('add', undefined, swatches)"
+        :bg-color="'bg-green-500'"
+        :hover-color="'hover:bg-green-600'"
+        :material-icon="`add`"
+        :hover-text="'Add color'"
+      />
+      <ButtonVue
+        :click="() => handleColorize(currentIndex)"
+        :bg-color="'bg-yellow-500'"
+        :hover-color="'hover:bg-yellow-600'"
+        :material-icon="`format_paint`"
+        :hover-text="'Color text'"
+      />
+      <ButtonVue
+        :click="() => handleClick('delete', currentPalette![currentIndex].id, swatches)"
+        :bg-color="'bg-red-500'"
+        :hover-color="'hover:bg-red-600'"
+        :material-icon="`delete`"
+        :hover-text="'Delete swatch'"
+      />
+      <ButtonVue
+        :click="() => handleShare(currentPalette![currentIndex].id)"
+        :bg-color="'bg-blue-500'"
+        :hover-color="'hover:bg-blue-600'"
+        :material-icon="`share`"
+        :hover-text="'Share swatch'"
+      />
     </div>
     <span class="self-center text-center flex gap-2 justify-center"
       >Color every
