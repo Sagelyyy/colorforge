@@ -66,7 +66,6 @@ watch(inputModel, () => {
 });
 
 function handleMouse(e: Event) {
-  // Capture user selection in textarea
   setUserSelection(e, selectedText);
   `handleMouse ${JSON.stringify(selectedText.value)}`;
 }

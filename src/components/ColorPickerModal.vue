@@ -22,8 +22,6 @@ function isInSwatchGroup(tag: string) {
 }
 
 function updateSwatches(color: string, tag: string) {
-  `updateSwatches ${color} ${tag}`;
-  modalState?.value;
   if (modalState?.value.mode === "add") {
     const newSwatch: SwatchInterface = {
       id: nanoid(),
@@ -43,7 +41,6 @@ function updateSwatches(color: string, tag: string) {
     });
     updatePalette();
   } else if (modalState?.value.mode === "delete") {
-    ("delete mode");
     swatchGroup?.value.forEach((swatch, index) => {
       if (swatch.id === modalState?.value.colorId) {
         swatchGroup?.value.splice(index, 1);
