@@ -4,6 +4,7 @@ import { ref, provide, type Ref, onMounted, watch } from "vue";
 import SwatchModal from "./SwatchModal.vue";
 import ColorPickerModal from "../components/ColorPickerModal.vue";
 import MiniSwatchModal from "../components/MiniSwatchModal.vue";
+import HelpPanel from "../components/HelpPanel.vue";
 import { loadFromLocalStorage, saveToLocalStorage } from "../utils/store";
 import type { SwatchInterface, ModalStateInterface } from "../utils/types";
 import {
@@ -23,6 +24,7 @@ const outputModel: Ref = ref("");
 const selectedText: Ref = ref({ start: 0, end: 0 });
 const swatchGroup: Ref<SwatchInterface[]> = ref([]);
 const currentPalette: Ref = ref(loadFromLocalStorage("Palettes"));
+const helpPanelState: Ref<boolean> = ref(false);
 provide("currentPalette", currentPalette);
 provide("modalState", modalState);
 provide("swatchGroup", swatchGroup);
@@ -75,6 +77,11 @@ function handleSwatchModal() {
   return swatchModalState.value;
 }
 
+function handleHelp() {
+  helpPanelState.value = !helpPanelState.value;
+  return helpPanelState.value;
+}
+
 function handleRemove() {
   removeColors(inputModel, outputModel);
 }
@@ -104,6 +111,7 @@ const boxStyle = `bg-black p-4 self-center border border-gray-600
     <MiniSwatchModal
       :handleSwatchModal="handleSwatchModal"
       :swatchModalState="swatchModalState"
+      :handleHelp="handleHelp"
     />
     <Transition name="slide">
       <SwatchModal
@@ -112,6 +120,9 @@ const boxStyle = `bg-black p-4 self-center border border-gray-600
         :handleSwatchModal="handleSwatchModal"
         :handleRemove="handleRemove"
       />
+    </Transition>
+    <Transition name="fade">
+      <HelpPanel v-show="helpPanelState" />
     </Transition>
     <div class="flex flex-col justify-center gap-6 m-auto h-dvh -mt-10">
       <div class="flex gap-2 justify-center"></div>
@@ -137,12 +148,29 @@ const boxStyle = `bg-black p-4 self-center border border-gray-600
   animation: slide 0.2s linear reverse;
 }
 
+.fade-enter-active {
+  animation: fade 0.2s linear forwards;
+}
+
+.fade-leave-active {
+  animation: fade 0.2s linear reverse;
+}
+
 @keyframes slide {
   0% {
     transform: translateX(-90%);
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 </style>
