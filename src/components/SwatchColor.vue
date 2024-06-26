@@ -64,7 +64,7 @@ function deleteItem(id: string | undefined) {
     );
     if (PaletteIndex !== undefined && PaletteIndex !== -1) {
       currentPalette?.value.splice(PaletteIndex, 1);
-      saveToLocalStorage("Palettes", currentPalette!.value);
+      saveToLocalStorage("palettes", currentPalette!.value);
     }
   } else {
     const swatchIndex = swatchGroup?.value.findIndex(
@@ -72,7 +72,7 @@ function deleteItem(id: string | undefined) {
     );
     if (swatchIndex !== undefined && swatchIndex !== -1) {
       swatchGroup?.value.splice(swatchIndex, 1);
-      saveToLocalStorage("Palettes", currentPalette!.value);
+      saveToLocalStorage("palettes", currentPalette!.value);
     }
   }
 }
@@ -91,7 +91,7 @@ function handleStep(e: Event, PaletteId: string) {
   currentPalette?.value.forEach((Palette) => {
     if (Palette.id === PaletteId) {
       Palette.step = Number((e.target as HTMLInputElement).value);
-      saveToLocalStorage("Palettes", currentPalette!.value);
+      saveToLocalStorage("palettes", currentPalette!.value);
     }
   });
 }

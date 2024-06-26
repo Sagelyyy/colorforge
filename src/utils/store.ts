@@ -1,7 +1,10 @@
 import { nanoid } from "nanoid";
 import { type PaletteInterface } from "./types";
 
-export function saveToLocalStorage(key: string, value: PaletteInterface[]) {
+export function saveToLocalStorage(
+  key: string,
+  value: PaletteInterface[] | number
+) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 

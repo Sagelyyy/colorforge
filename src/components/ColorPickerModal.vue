@@ -57,7 +57,7 @@ function updatePalette() {
     }
   });
 
-  saveToLocalStorage("Palettes", currentPalette!.value);
+  saveToLocalStorage("palettes", currentPalette!.value);
 }
 </script>
 

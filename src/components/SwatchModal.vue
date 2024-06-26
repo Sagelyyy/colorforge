@@ -7,22 +7,34 @@ import { nanoid } from "nanoid";
 import { saveToLocalStorage } from "../utils/store";
 import ButtonVue from "./ButtonVue.vue";
 import { Base64 } from "js-base64";
-const Palettes = inject<Ref<PaletteInterface[]>>("currentPalette");
+
+const palettes = inject<Ref<PaletteInterface[]>>("currentPalette");
 
 defineProps<{
   handleImport: (e: Event) => void;
   handleSwatchModal: () => void;
   handleRemove: () => void;
+  handleResizeVisibility: () => boolean;
+  handleResize: (e: Event) => void;
+  resizeVisibility: boolean;
 }>();
 
 function addNewPalette() {
-  Palettes?.value.push({ id: nanoid(), step: 1, swatches: [] });
-  saveToLocalStorage("Palettes", Palettes!.value);
+  if (palettes) {
+    palettes.value.push({
+      id: nanoid(),
+      step: 1,
+      swatches: [],
+    });
+    saveToLocalStorage("palettes", palettes!.value);
+  } else {
+    return;
+  }
 }
 
 function clearPalettes() {
-  Palettes!.value = [];
-  saveToLocalStorage("Palettes", Palettes!.value);
+  palettes!.value = [];
+  saveToLocalStorage("palettes", palettes!.value);
 }
 
 function importPalette() {
@@ -30,8 +42,8 @@ function importPalette() {
     if (Base64.isValid(text)) {
       const newPalette = JSON.parse(Base64.decode(text));
       newPalette.id = nanoid();
-      Palettes?.value.push(newPalette);
-      saveToLocalStorage("Palettes", Palettes!.value);
+      palettes?.value.push(newPalette);
+      saveToLocalStorage("palettes", palettes!.value);
     } else {
       alert("Invalid palette string");
     }
@@ -41,12 +53,12 @@ function importPalette() {
 
 <template>
   <div
-    class="__swatch-modal flex flex-col gap-4 absolute bg-slate-500 bottom-16 top-2/4 p-2 w-dvw overflow-x-visible overflow-y-auto lg:[height:calc(100dvh-2rem)] lg:left-8 lg:top-0 lg:w-1/5 z-0"
+    class="__swatch-modal flex flex-col gap-4 absolute bg-slate-500 bottom-16 top-2/4 p-2 w-dvw overflow-x-visible lg:[height:calc(100dvh-2rem)] lg:left-8 lg:top-0 lg:w-1/5 z-[2]"
   >
     <div class="__swatch-controls flex flex-col items-stretch gap-4">
       <div class="flex flex-col gap-2 justify-evenly">
         <a
-          :href="`data:text/json;charset=utf-8,` + JSON.stringify(Palettes)"
+          :href="`data:text/json;charset=utf-8,` + JSON.stringify(palettes)"
           download="colors.json"
           class="self-center w-full bg-slate-700 p-2 text-center hover:bg-slate-900"
           >Export</a
@@ -63,7 +75,17 @@ function importPalette() {
           />
         </div>
       </div>
-      <div class="flex gap-2 justify-center border-b-2 border-b-slate-700 p-2">
+      <div
+        class="flex gap-2 justify-center border-b-2 border-b-slate-700 p-2 items-center flex-auto flex-wrap z-10"
+      >
+        <ButtonVue
+          :click="() => handleResizeVisibility()"
+          :bg-color="`bg-slate-700`"
+          :hover-color="`hover:bg-slate-800`"
+          :material-icon="`sliders`"
+          :hover-text="`Adjust buffer width`"
+        />
+
         <ButtonVue
           :click="() => addNewPalette()"
           :bgColor="'bg-green-500'"
@@ -95,7 +117,7 @@ function importPalette() {
       </div>
     </div>
     <SwatchColor
-      v-for="(pallet, index) in Palettes"
+      v-for="(pallet, index) in palettes"
       :key="pallet.id"
       :swatches="pallet.swatches"
       :currentIndex="index"
