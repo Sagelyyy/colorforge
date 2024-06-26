@@ -113,6 +113,11 @@ function handleRemove() {
   removeColors(inputModel, outputModel);
 }
 
+function handleIpsum() {
+  inputModel.value =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+}
+
 function handleImport(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0];
   if (file) {
@@ -157,6 +162,7 @@ watchEffect(() => {
         :handleResizeVisibility="handleResizeVisibility"
         :handleResize="handleResize"
         :resizeVisibility="resizeVisibility"
+        :handleIpsum="handleIpsum"
       />
     </Transition>
     <Transition name="fade">
@@ -182,7 +188,11 @@ watchEffect(() => {
       spellcheck="false"
       placeholder="Enter text and colors here..."
     ></textarea>
-    <div :class="boxClass" :style="boxStyle">
+    <div
+      :class="boxClass"
+      :style="boxStyle"
+      class="overflow-y-auto overflow-x-hidden whitespace-pre-wrap break-words"
+    >
       <span v-html="outputModel"></span>
     </div>
   </div>

@@ -17,6 +17,7 @@ defineProps<{
   handleResizeVisibility: () => boolean;
   handleResize: (e: Event) => void;
   resizeVisibility: boolean;
+  handleIpsum: () => void;
 }>();
 
 function addNewPalette() {
@@ -53,7 +54,7 @@ function importPalette() {
 
 <template>
   <div
-    class="__swatch-modal flex flex-col gap-4 absolute bg-slate-500 bottom-16 top-2/4 p-2 w-dvw overflow-x-visible lg:[height:calc(100dvh-2rem)] lg:left-8 lg:top-0 lg:w-1/5 z-[2]"
+    class="__swatch-modal flex flex-col gap-4 absolute bg-slate-500 bottom-16 top-2/4 p-2 w-dvw overflow-y-auto lg:[height:calc(100dvh-2rem)] lg:left-8 lg:top-0 lg:w-1/5 z-[2]"
   >
     <div class="__swatch-controls flex flex-col items-stretch gap-4">
       <div class="flex flex-col gap-2 justify-evenly">
@@ -79,14 +80,6 @@ function importPalette() {
         class="flex gap-2 justify-center border-b-2 border-b-slate-700 p-2 items-center flex-auto flex-wrap z-10"
       >
         <ButtonVue
-          :click="() => handleResizeVisibility()"
-          :bg-color="`bg-slate-700`"
-          :hover-color="`hover:bg-slate-800`"
-          :material-icon="`sliders`"
-          :hover-text="`Adjust buffer width`"
-        />
-
-        <ButtonVue
           :click="() => addNewPalette()"
           :bgColor="'bg-green-500'"
           :hoverColor="'hover:bg-green-600'"
@@ -101,6 +94,13 @@ function importPalette() {
           :hoverText="'Import swatch from clipboard'"
         />
         <ButtonVue
+          :click="() => clearPalettes()"
+          :bgColor="'bg-red-500'"
+          :hoverColor="'hover:bg-red-600'"
+          :materialIcon="'delete_sweep'"
+          :hoverText="`Delete all palettes`"
+        />
+        <ButtonVue
           :click="() => handleRemove()"
           :bgColor="'bg-slate-700'"
           :hoverColor="'hover:bg-slate-800'"
@@ -108,11 +108,18 @@ function importPalette() {
           :hoverText="`Remove all colors from text`"
         />
         <ButtonVue
-          :click="() => clearPalettes()"
-          :bgColor="'bg-red-500'"
-          :hoverColor="'hover:bg-red-600'"
-          :materialIcon="'delete_sweep'"
-          :hoverText="`Delete all palettes`"
+          :click="() => handleIpsum()"
+          :bg-color="`bg-slate-700`"
+          :hover-color="`hover:bg-slate-800`"
+          :material-icon="`summarize`"
+          :hover-text="`Generate ipsum`"
+        />
+        <ButtonVue
+          :click="() => handleResizeVisibility()"
+          :bg-color="`bg-slate-700`"
+          :hover-color="`hover:bg-slate-800`"
+          :material-icon="`sliders`"
+          :hover-text="`Adjust buffer width`"
         />
       </div>
     </div>

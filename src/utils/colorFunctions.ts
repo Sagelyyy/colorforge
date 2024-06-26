@@ -33,7 +33,12 @@ export function setUserSelection(
   const target = e.target as HTMLInputElement;
   const selectionStart = target.selectionStart ?? 0;
   const selectionEnd = target.selectionEnd ?? 0;
-  selectedText.value = { start: selectionStart, end: selectionEnd };
+  console.log(selectionStart, selectionEnd, target.value.length);
+  if (target.selectionStart == 0 && target.selectionEnd == 0) {
+    selectedText.value = { start: selectionStart, end: target.value.length };
+  } else {
+    selectedText.value = { start: selectionStart, end: selectionEnd };
+  }
 }
 
 export function applyColors(
@@ -47,7 +52,6 @@ export function applyColors(
   const textSelection = inputModel.value.slice(start, end);
   const step = Palette.value[swatchIndex].step;
   const swatches = Palette.value[swatchIndex].swatches;
-
   const colorizedText = colorizeText(textSelection, step, swatches);
 
   inputModel.value =
