@@ -33,12 +33,8 @@ export function setUserSelection(
   const target = e.target as HTMLInputElement;
   const selectionStart = target.selectionStart ?? 0;
   const selectionEnd = target.selectionEnd ?? 0;
-  console.log(selectionStart, selectionEnd, target.value.length);
-  if (target.selectionStart == 0 && target.selectionEnd == 0) {
-    selectedText.value = { start: selectionStart, end: target.value.length };
-  } else {
-    selectedText.value = { start: selectionStart, end: selectionEnd };
-  }
+
+  selectedText.value = { start: selectionStart, end: selectionEnd };
 }
 
 export function applyColors(

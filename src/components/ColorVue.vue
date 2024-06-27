@@ -138,7 +138,7 @@ const boxStyle: CSSProperties = reactive({
 });
 
 const boxClass =
-  "bg-black p-4 self-center border border-gray-600 resize-none h-2/6";
+  "__boxes bg-black p-4 self-center border border-gray-600 resize-none h-2/6";
 
 watchEffect(() => {
   boxStyle.width = `${bufferWidth.value}px`;
@@ -198,7 +198,18 @@ watchEffect(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
+@font-face {
+  font-family: "Fixedsys Excelsior";
+  src: url("../fonts/FSEX.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.__boxes {
+  font-family: "Fixedsys Excelsior";
+}
+
 .slide-enter-active {
   animation: slide 0.2s linear forwards;
 }
