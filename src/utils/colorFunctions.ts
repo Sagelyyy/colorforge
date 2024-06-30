@@ -33,7 +33,6 @@ export function setUserSelection(
   const target = e.target as HTMLInputElement;
   const selectionStart = target.selectionStart ?? 0;
   const selectionEnd = target.selectionEnd ?? 0;
-
   selectedText.value = { start: selectionStart, end: selectionEnd };
 }
 
