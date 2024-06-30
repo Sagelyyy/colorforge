@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ButtonVue from "./ButtonVue.vue";
 import DetailsVue from "./DetailsVue.vue";
 </script>
 
@@ -16,9 +15,9 @@ import DetailsVue from "./DetailsVue.vue";
       </template>
     </DetailsVue>
     <DetailsVue>
-      <template #title> What is Legends of the Jedi? </template>
+      <template #title> What is Legends of The Jedi? </template>
       <template #content>
-        Legends of the Jedi is a Multi-User Dungeon (MUD) roleplaying game that
+        Legends of The Jedi is a Multi-User Dungeon (MUD) roleplaying game that
         you connect to using a client. You can find out more
         <a
           class="underline text-blue-500 hover:text-blue-600"
@@ -79,6 +78,34 @@ import DetailsVue from "./DetailsVue.vue";
         top box, then click the "Color text" button. You can change how often
         your colors are inserted into the text by changing the number "Color
         every X letters.".
+      </template>
+    </DetailsVue>
+
+    <DetailsVue>
+      <template #title
+        >I dont like a certain color in my swatch how do I fix it?</template
+      >
+      <template #content>
+        You can either delete the color entirely by hovering over it and
+        clicking the trash icon, or you can click the color and select a new
+        one.
+      </template>
+    </DetailsVue>
+    <DetailsVue>
+      <template #title>How do I export or import a palette?</template>
+      <template #content>
+        To export a palette, simply click the "Export palettes" button. To
+        import a palette simply click "Browse" and select your exported
+        colors.json file.
+      </template>
+    </DetailsVue>
+    <DetailsVue>
+      <template #title>How do I share an individual palette?</template>
+      <template #content>
+        To share a single palette simply click the share button on the desired
+        palette. You then share the copied code with your friend and they import
+        it by copying it and clicking the "import palette from clipboard
+        "button.
       </template>
     </DetailsVue>
   </div>

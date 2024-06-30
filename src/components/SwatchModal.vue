@@ -24,6 +24,7 @@ function addNewPalette() {
   if (palettes) {
     palettes.value.push({
       id: nanoid(),
+      name: "",
       step: 1,
       swatches: [],
     });
@@ -38,15 +39,39 @@ function clearPalettes() {
   saveToLocalStorage("palettes", palettes!.value);
 }
 
+function isPalette(palette: PaletteInterface) {
+  return (
+    typeof palette === "object" &&
+    "id" in palette &&
+    "step" in palette &&
+    "name" in palette &&
+    "swatches" in palette &&
+    typeof palette.id === "string" &&
+    typeof palette.step === "number" &&
+    Array.isArray(palette.swatches)
+  );
+}
+
 function importPalette() {
   navigator.clipboard.readText().then((text) => {
-    if (Base64.isValid(text)) {
-      const newPalette = JSON.parse(Base64.decode(text));
-      newPalette.id = nanoid();
-      palettes?.value.push(newPalette);
-      saveToLocalStorage("palettes", palettes!.value);
-    } else {
-      alert("Invalid palette string");
+    try {
+      if (Base64.isValid(text)) {
+        const decodedText = Base64.decode(text);
+        const parsedPalette = JSON.parse(decodedText);
+
+        if (isPalette(parsedPalette)) {
+          parsedPalette.id = nanoid();
+          palettes?.value.push(parsedPalette);
+          saveToLocalStorage("palettes", palettes!.value);
+        } else {
+          alert("Malformed palette data");
+        }
+      } else {
+        alert("Malformed palette data");
+      }
+    } catch (error) {
+      console.error("Error importing palette:", error);
+      alert("Malformed palette data");
     }
   });
 }
@@ -62,12 +87,12 @@ function importPalette() {
           :href="`data:text/json;charset=utf-8,` + JSON.stringify(palettes)"
           download="colors.json"
           class="self-center w-full bg-slate-700 p-2 text-center hover:bg-slate-900"
-          >Export</a
+          >Export palette</a
         >
         <div
           class="flex flex-col gap-2 justify-center bg-slate-700 text-center border border-black p-2"
         >
-          <p>Import colors</p>
+          <p>Import palette</p>
           <input
             class="bg-slate-800 p-1"
             type="file"
@@ -91,7 +116,7 @@ function importPalette() {
           :bgColor="'bg-blue-500'"
           :hoverColor="'hover:bg-blue-600'"
           :materialIcon="'file_upload'"
-          :hoverText="'Import swatch from clipboard'"
+          :hoverText="'Import palette from clipboard'"
         />
         <ButtonVue
           :click="() => clearPalettes()"

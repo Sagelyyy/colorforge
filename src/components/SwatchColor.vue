@@ -96,6 +96,15 @@ function handleStep(e: Event, PaletteId: string) {
   });
 }
 
+function handleName(e: Event, paletteId: string) {
+  currentPalette?.value.forEach((Palette) => {
+    if (Palette.id === paletteId) {
+      Palette.name = (e.target as HTMLInputElement).value;
+      saveToLocalStorage("palettes", currentPalette!.value);
+    }
+  });
+}
+
 function handleShare(PaletteId: string) {
   currentPalette?.value.forEach((Palette) => {
     if (Palette.id === PaletteId) {
@@ -108,6 +117,13 @@ function handleShare(PaletteId: string) {
 
 <template>
   <div class="flex flex-col gap-2 justify-center">
+    <input
+      class="self-center bg-slate-700 p-2 h-10 border border-black rounded-md"
+      placeholder="Name your palette"
+      type="text"
+      v-model="currentPalette![currentIndex].name"
+      @change="handleName($event, currentPalette![currentIndex].id)"
+    />
     <div class="flex gap-2 justify-center">
       <ButtonVue
         :click="() => handleClick('add', undefined, swatches)"
@@ -135,7 +151,7 @@ function handleShare(PaletteId: string) {
         :bg-color="'bg-blue-500'"
         :hover-color="'hover:bg-blue-600'"
         :material-icon="`share`"
-        :hover-text="'Share swatch'"
+        :hover-text="'Share palette'"
       />
     </div>
     <span class="self-center text-center flex gap-2 justify-center"
@@ -150,6 +166,7 @@ function handleShare(PaletteId: string) {
       letters
     </span>
   </div>
+
   <div
     class="flex gap-2 justify-center flex-wrap border-b-2 border-b-slate-700 pb-2"
   >

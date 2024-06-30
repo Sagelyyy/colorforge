@@ -4,6 +4,7 @@ export interface ColorTableInterface {
 export interface PaletteInterface {
   id: string;
   step: number;
+  name: string;
   swatches: SwatchInterface[];
 }
 

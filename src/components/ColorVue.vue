@@ -51,10 +51,10 @@ onMounted(() => {
     {
       id: nanoid(),
       step: 5,
+      name: "",
       swatches: [
         {
           id: nanoid(),
-          name: "",
           color: "rgb(215, 215, 0)",
           tag: "&184",
         },
@@ -63,10 +63,10 @@ onMounted(() => {
     {
       id: nanoid(),
       step: 2,
+      name: "",
       swatches: [
         {
           id: nanoid(),
-          name: "",
           color: "rgb(0, 255, 135)",
           tag: "&048",
         },
@@ -87,6 +87,11 @@ watch(inputModel, () => {
 
 function handleResize(e: Event) {
   bufferWidth.value = parseInt((e.target as HTMLInputElement).value, 10);
+}
+
+function handleVisibility(item: Ref<boolean>) {
+  item.value = !item.value;
+  return item.value;
 }
 
 function handleResizeVisibility() {
