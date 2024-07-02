@@ -104,57 +104,61 @@ function importPalette() {
         </div>
       </div>
       <div
-        class="flex gap-2 justify-center border-b-2 border-b-slate-700 p-2 items-center flex-auto flex-wrap z-10"
+        class="flex flex-col gap-2 justify-center border-b-2 border-b-slate-700 p-2 items-center flex-auto flex-wrap z-10"
       >
-        <ButtonVue
-          :click="() => addNewPalette()"
-          :bgColor="'bg-green-500'"
-          :hoverColor="'hover:bg-green-600'"
-          :materialIcon="'add_circle'"
-          :hoverText="'Add new palette'"
-        />
-        <ButtonVue
-          :click="() => importPalette()"
-          :bgColor="'bg-blue-500'"
-          :hoverColor="'hover:bg-blue-600'"
-          :materialIcon="'file_upload'"
-          :hoverText="'Import palette from clipboard'"
-        />
-        <ButtonVue
-          :click="() => clearPalettes()"
-          :bgColor="'bg-red-500'"
-          :hoverColor="'hover:bg-red-600'"
-          :materialIcon="'delete_sweep'"
-          :hoverText="`Delete all palettes`"
-        />
-        <ButtonVue
-          :click="() => handleRemove()"
-          :bgColor="'bg-slate-700'"
-          :hoverColor="'hover:bg-slate-800'"
-          :materialIcon="`invert_colors_off`"
-          :hoverText="`Remove all colors from text`"
-        />
-        <ButtonVue
-          :click="() => copyRawColors(inputModel)"
-          :bgColor="'bg-slate-700'"
-          :hoverColor="'hover:bg-slate-800'"
-          :materialIcon="`content_copy`"
-          :hoverText="`Copy raw colors`"
-        />
-        <ButtonVue
-          :click="() => handleIpsum()"
-          :bg-color="`bg-slate-700`"
-          :hover-color="`hover:bg-slate-800`"
-          :material-icon="`summarize`"
-          :hover-text="`Generate ipsum`"
-        />
-        <ButtonVue
-          :click="() => handleResizeVisibility()"
-          :bg-color="`bg-slate-700`"
-          :hover-color="`hover:bg-slate-800`"
-          :material-icon="`sliders`"
-          :hover-text="`Adjust buffer width`"
-        />
+        <div class="flex gap-2 flex-wrap justify-center">
+          <ButtonVue
+            :click="() => addNewPalette()"
+            :bgColor="'bg-green-500'"
+            :hoverColor="'hover:bg-green-600'"
+            :materialIcon="'add_circle'"
+            :hoverText="'Add new palette'"
+          />
+          <ButtonVue
+            :click="() => importPalette()"
+            :bgColor="'bg-blue-500'"
+            :hoverColor="'hover:bg-blue-600'"
+            :materialIcon="'file_upload'"
+            :hoverText="'Import palette from clipboard'"
+          />
+          <ButtonVue
+            :click="() => clearPalettes()"
+            :bgColor="'bg-red-500'"
+            :hoverColor="'hover:bg-red-600'"
+            :materialIcon="'delete_sweep'"
+            :hoverText="`Delete all palettes`"
+          />
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <ButtonVue
+            :click="() => handleRemove()"
+            :bgColor="'bg-slate-700'"
+            :hoverColor="'hover:bg-slate-800'"
+            :materialIcon="`invert_colors_off`"
+            :hoverText="`Remove all colors from text`"
+          />
+          <ButtonVue
+            :click="() => copyRawColors(inputModel)"
+            :bgColor="'bg-slate-700'"
+            :hoverColor="'hover:bg-slate-800'"
+            :materialIcon="`content_copy`"
+            :hoverText="`Copy raw colors`"
+          />
+          <ButtonVue
+            :click="() => handleIpsum()"
+            :bg-color="`bg-slate-700`"
+            :hover-color="`hover:bg-slate-800`"
+            :material-icon="`summarize`"
+            :hover-text="`Generate ipsum`"
+          />
+          <ButtonVue
+            :click="() => handleResizeVisibility()"
+            :bg-color="`bg-slate-700`"
+            :hover-color="`hover:bg-slate-800`"
+            :material-icon="`sliders`"
+            :hover-text="`Adjust buffer width`"
+          />
+        </div>
       </div>
     </div>
     <SwatchColor
