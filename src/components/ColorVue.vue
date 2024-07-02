@@ -152,54 +152,58 @@ watchEffect(() => {
 
 <template>
   <div>
-    <ColorPickerModal />
-    <MiniSwatchModal
-      :handleSwatchModal="handleSwatchModal"
-      :swatchModalState="swatchModalState"
-      :handleHelp="handleHelp"
-    />
-    <Transition name="slide">
-      <SwatchModal
-        v-show="swatchModalState"
-        :handleImport="handleImport"
+    <div>
+      <ColorPickerModal />
+      <MiniSwatchModal
         :handleSwatchModal="handleSwatchModal"
-        :handleRemove="handleRemove"
-        :handleResizeVisibility="handleResizeVisibility"
-        :handleResize="handleResize"
-        :resizeVisibility="resizeVisibility"
-        :handleIpsum="handleIpsum"
-        :inputModel="inputModel"
+        :swatchModalState="swatchModalState"
+        :handleHelp="handleHelp"
       />
-    </Transition>
-    <Transition name="fade">
-      <HelpPanel v-show="helpPanelState" />
-    </Transition>
-  </div>
-  <div class="flex flex-col justify-center gap-6 m-auto h-dvh -mt-10 relative">
-    <input
-      v-if="resizeVisibility"
-      class="bg-slate-700 self-center absolute top-1/2"
-      type="range"
-      min="100"
-      max="950"
-      v-model="bufferWidth"
-      @input="handleResize"
-    />
-    <div class="flex gap-2 justify-center"></div>
-    <textarea
-      :class="boxClass"
-      :style="boxStyle"
-      v-model="inputModel"
-      @mouseup="handleMouse"
-      spellcheck="false"
-      placeholder="Enter text and colors here..."
-    ></textarea>
+      <Transition name="slide">
+        <SwatchModal
+          v-show="swatchModalState"
+          :handleImport="handleImport"
+          :handleSwatchModal="handleSwatchModal"
+          :handleRemove="handleRemove"
+          :handleResizeVisibility="handleResizeVisibility"
+          :handleResize="handleResize"
+          :resizeVisibility="resizeVisibility"
+          :handleIpsum="handleIpsum"
+          :inputModel="inputModel"
+        />
+      </Transition>
+      <Transition name="fade">
+        <HelpPanel v-show="helpPanelState" />
+      </Transition>
+    </div>
     <div
-      :class="boxClass"
-      :style="boxStyle"
-      class="overflow-y-auto overflow-x-hidden whitespace-pre-wrap break-words"
+      class="flex flex-col justify-center gap-6 m-auto h-dvh -mt-10 relative"
     >
-      <span v-html="outputModel"></span>
+      <input
+        v-if="resizeVisibility"
+        class="bg-slate-700 self-center absolute top-1/2"
+        type="range"
+        min="100"
+        max="950"
+        v-model="bufferWidth"
+        @input="handleResize"
+      />
+      <div class="flex gap-2 justify-center"></div>
+      <textarea
+        :class="boxClass"
+        :style="boxStyle"
+        v-model="inputModel"
+        @mouseup="handleMouse"
+        spellcheck="false"
+        placeholder="Enter text and colors here..."
+      ></textarea>
+      <div
+        :class="boxClass"
+        :style="boxStyle"
+        class="overflow-y-auto overflow-x-hidden whitespace-pre-wrap break-words"
+      >
+        <span v-html="outputModel"></span>
+      </div>
     </div>
   </div>
 </template>

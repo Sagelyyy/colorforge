@@ -81,7 +81,7 @@ function importPalette() {
 
 <template>
   <div
-    class="__swatch-modal flex flex-col gap-4 absolute bg-slate-500 bottom-16 top-2/4 p-2 w-dvw overflow-y-auto lg:[height:calc(100dvh-2rem)] lg:left-8 lg:top-0 lg:w-1/5 z-[2]"
+    class="__swatch-modal flex flex-col gap-4 absolute bg-slate-500 bottom-16 top-2/4 p-2 w-dvw overflow-y-auto overflow-x-hidden lg:[height:calc(100dvh-2rem)] lg:left-8 lg:top-0 lg:w-1/5 z-[2]"
   >
     <div class="__swatch-controls flex flex-col items-stretch gap-4">
       <div class="flex flex-col gap-2 justify-evenly">
