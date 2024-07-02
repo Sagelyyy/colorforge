@@ -168,6 +168,7 @@ watchEffect(() => {
         :handleResize="handleResize"
         :resizeVisibility="resizeVisibility"
         :handleIpsum="handleIpsum"
+        :inputModel="inputModel"
       />
     </Transition>
     <Transition name="fade">

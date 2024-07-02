@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import { saveToLocalStorage } from "../utils/store";
 import ButtonVue from "./ButtonVue.vue";
 import { Base64 } from "js-base64";
+import { copyRawColors } from "../utils/colorFunctions";
 
 const palettes = inject<Ref<PaletteInterface[]>>("currentPalette");
 
@@ -18,6 +19,7 @@ defineProps<{
   handleResize: (e: Event) => void;
   resizeVisibility: boolean;
   handleIpsum: () => void;
+  inputModel: string;
 }>();
 
 function addNewPalette() {
@@ -131,6 +133,13 @@ function importPalette() {
           :hoverColor="'hover:bg-slate-800'"
           :materialIcon="`invert_colors_off`"
           :hoverText="`Remove all colors from text`"
+        />
+        <ButtonVue
+          :click="() => copyRawColors(inputModel)"
+          :bgColor="'bg-slate-700'"
+          :hoverColor="'hover:bg-slate-800'"
+          :materialIcon="`content_copy`"
+          :hoverText="`Copy raw colors`"
         />
         <ButtonVue
           :click="() => handleIpsum()"

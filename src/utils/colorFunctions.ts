@@ -18,6 +18,16 @@ export function findColor(
   });
 }
 
+export async function copyRawColors(input: string) {
+  const regex = /&/gi;
+  const rawColors = input.replace(regex, "&&");
+  try {
+    await navigator.clipboard.writeText(rawColors);
+  } catch (error) {
+    console.error("Error copying text to clipboard:", error);
+  }
+}
+
 export function removeColors(
   input: Ref<string>,
   output: Ref<string | undefined>
